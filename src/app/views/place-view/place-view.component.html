@@ -1,0 +1,99 @@
+<!-- Place title -->
+<div
+  *ngIf="!this.place.isUndefined()"
+  class="tl-title tl-big-bottom-margined">
+  {{ this.place.name }}
+</div>
+
+<!-- Display loader if place is not resolved yet -->
+<tl-loader
+  *ngIf="this.place.isUndefined() || !this.place.areBatchesResolved">
+</tl-loader>
+
+<!-- Batches panel -->
+<div
+  *ngIf="!this.place.isUndefined() && this.place.areBatchesResolved"
+  class="tl-full tl-row-dir tl-hor-center tl-flex-block">
+  
+  <tl-nuki-card
+    *ngFor="let batch of this.place.resolvedBatches"
+    class="tl-margined"
+    [imageSrc]="'/assets/img/riz.jpg'"
+    [size]="'tl-big'"
+    [tlStyle]="'tl-glassmorphic'"
+    [padding]="20">
+    
+    <div
+      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
+        
+      <div
+        class="tl-subtitle"
+        style="margin-right:10px">
+        {{ batch.name }}
+      </div>
+      
+      <div
+        class="tl-row-dir tl-vert-center tl-flex-block">
+      
+        <tl-square-icon
+          style="cursor:pointer"
+          class="tl-margined"
+          [size]="25"
+          [icon]="'ion-heart-outline'"
+          [color]="(batch.favorite)?'tl-outline':'tl-main'">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          style="cursor:pointer"
+          class="tl-margined"
+          [size]="25"
+          [icon]="'ion-share-social-outline'">
+        </tl-square-icon>
+        
+      </div>
+      
+    </div>
+    
+    <tl-gauge
+      style="margin-top:20px;margin-bottom:30px"
+      [tlStyle]="'tl-glassmorphic'"
+      [size]="'tl-near-full-responsive'"
+      [min]="0"
+      [low]="batch.lowLimitQuantity"
+      [high]="batch.goodQuantity"
+      [max]="batch.highestQuantity"
+      [current]="batch.quantity">
+    </tl-gauge>
+    
+    <div
+      class="tl-row-dir tl-vert-center tl-flex-block">
+      
+      <tl-button
+        class="tl-margined"
+        [tlStyle]="'tl-dome'"
+        [icon]="'ion-remove-outline'"
+        (clickButton)="onClickBatchRemove(batch)">
+      </tl-button>
+      
+      <tl-button
+        class="tl-margined"
+        [tlStyle]="'tl-dome'"
+        [icon]="'ion-add-outline'"
+        (clickButton)="onClickBatchAdd(batch)">
+      </tl-button>
+      
+    </div>
+    
+  </tl-nuki-card>
+  
+</div>
+
+<!-- Button to add a new batch -->
+<tl-button
+  *ngIf="!this.place.isUndefined()"
+  class="tl-xbig-margined"
+  [tlStyle]="'tl-glassmorphic'"
+  [size]="50"
+  [label]="'Nouveau'"
+  [icon]="'ion-add-outline'">
+</tl-button>

@@ -1,0 +1,78 @@
+<!-- Display loader if stock places are not loaded yet -->
+<tl-loader
+  *ngIf="!this.stockService.isLoaded">
+</tl-loader>
+
+<!-- Places panel -->
+<div
+  *ngIf="this.stockService.isLoaded"
+  class="tl-full tl-row-dir tl-hor-center tl-flex-block">
+  
+  <tl-card
+    *ngFor="let place of this.stockService.places"
+    class="place-card tl-clickable"
+    [size]="'tl-big'"
+    [tlStyle]="'tl-glassmorphic'"
+    [padding]="20"
+    (click)="onClickPlace(place)">
+    
+    <div
+      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
+      
+      <div
+        class="tl-row-dir tl-vert-center tl-flex-block">
+        
+        <div
+          class="tl-subtitle"
+          style="margin-right:10px">
+          {{ place.name }}
+        </div>
+        
+        <tl-spinner
+          *ngIf="!place.areBatchesResolved">
+        </tl-spinner>
+        
+        <tl-square-icon
+          *ngIf="place.areBatchesResolved"
+          [icon]="'ion-partly-sunny-outline'"
+          [size]="25">
+        </tl-square-icon>
+        
+      </div>
+      
+      <div
+        class="tl-row-dir tl-vert-center tl-flex-block">
+      
+        <tl-square-icon
+          style="cursor:pointer"
+          class="tl-margined"
+          [size]="25"
+          [icon]="'ion-heart-outline'"
+          [color]="(place.favorite)?'tl-outline':'tl-main'">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          style="cursor:pointer"
+          class="tl-margined"
+          [size]="25"
+          [icon]="'ion-share-social-outline'">
+        </tl-square-icon>
+        
+      </div>
+      
+    </div>
+    
+  </tl-card>
+  
+</div>
+
+<!-- Button to add a new place -->
+<tl-button
+  *ngIf="this.stockService.isLoaded"
+  class="tl-xbig-margined"
+  [tlStyle]="'tl-glassmorphic'"
+  [size]="50"
+  [label]="'Nouveau'"
+  [icon]="'ion-add-outline'">
+</tl-button>
+  
