@@ -15,6 +15,9 @@ import { PlaceViewComponent } from './views/place-view/place-view.component';
 
 // Components
 import { TlGaugeComponent } from './components/tl-gauge/tl-gauge.component';
+import { TlFormComponent } from './components/tl-form/tl-form.component';
+import { TlInputComponent } from './components/tl-input/tl-input.component';
+import { TlSelectComponent } from './components/tl-select/tl-select.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { TlGaugeComponent } from './components/tl-gauge/tl-gauge.component';
     TlGaugeComponent,
     StockViewComponent,
     StatsViewComponent,
-    PlaceViewComponent
+    PlaceViewComponent,
+    TlFormComponent,
+    TlInputComponent,
+    TlSelectComponent
   ],
   imports: [
     BrowserModule,
