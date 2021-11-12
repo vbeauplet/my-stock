@@ -1,0 +1,22 @@
+.new-place-button {
+  position:fixed;
+  bottom:100px;
+  right:20px;
+}
+
+.new-place-button-label{
+  position:relative;
+  left:0px;
+  opacity:1;
+  transition: left ease-in 300ms,
+   opacity ease-out 300ms;
+}
+
+  .new-place-button-label.hidden{
+    opacity:0;
+    left:100px;
+  }
+  
+  .new-place-button-label.none{
+    display:none;
+  }

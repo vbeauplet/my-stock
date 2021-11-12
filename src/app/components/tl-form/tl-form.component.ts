@@ -84,6 +84,11 @@ export class TlFormComponent implements OnInit {
   @Input() activateItemValidation: boolean = true;
   
   /**
+   * Loading status of the submit button
+   */
+  @Input() submitButtonLoadingStatus: number = -1;
+  
+  /**
    * Event which is emitted when form value changes
    */
   @Output() changeForm: EventEmitter<ITlFormItemState[]> = new EventEmitter<ITlFormItemState[]>();

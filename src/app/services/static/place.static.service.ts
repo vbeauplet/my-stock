@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Batch } from 'src/app/model/batch.model';
-import { Place } from 'src/app/model/place.model';
+import { Place, placeConverter } from 'src/app/model/place.model';
 import { BatchStaticService } from './batch.static.service';
+
+import { getFirestore, collection, query, getDocs, setDoc, doc,updateDoc, increment } from "firebase/firestore";
+import { AppService } from '../app.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +12,10 @@ import { BatchStaticService } from './batch.static.service';
 export class PlaceStaticService {
 
   constructor(
+      private appService: AppService,
       private batchStaticService: BatchStaticService
     ) { }
+  
   
   /**
    * Gets all places correpsonding to a user on server
@@ -18,41 +23,38 @@ export class PlaceStaticService {
    * Returns the request promise so that resulting data can be handled asynchronously
    */
   public getPlacesOnServer(userId: String): Promise<Place[]>{
-    return new Promise<Place[]>((resolve, reject) => {
+    return new Promise<Place[]>(async (resolve) => {
       
-      // Stub
-      let place1: Place = new Place;
-      place1.id = '1';
-      place1.name = 'Extension';
-      place1.description = 'Pas de description';
-      place1.favorite = false;
-      place1.position = '';
+      let result: Place[] = [];
+
+      const db = getFirestore(this.appService.firebaseApp);
+      const q = query(collection(db, '/places'));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        
+        let place: Place = placeConverter.fromServer(doc.data());
+        result.push(place);
+      });
+      
+      resolve(result);      
+    });
+  }
+  
     
-      let place2: Place = new Place;
-      place2.id = '2';
-      place2.name = 'Congelateur';
-      place2.description = 'Pas de description';
-      place2.favorite = false;
-      place2.position = '';
-    
-      let place3: Place = new Place;
-      place3.id = '3';
-      place3.name = 'Cuisine';
-      place3.description = 'Pas de description';
-      place3.favorite = true;
-      place3.position = '';
+  /**
+   * Add a place on server
+   *
+   * Returns the request promise so that we now when over
+   */
+  public addPlaceOnServer(place: Place): Promise<void>{
+    return new Promise<void>(async (resolve) => {
       
-      let place4: Place = new Place;
-      place4.id = '4';
-      place4.name = 'Coffrage';
-      place4.description = 'Pas de description';
-      place4.favorite = false;
-      place4.position = '';
-      
-      setTimeout(() => {
-        resolve([place1, place2, place3, place4]);
-      }, 1000);
-      
+      const db = getFirestore(this.appService.firebaseApp);
+      const batchRef = doc(db, '/places', place.id);
+      await setDoc(batchRef, placeConverter.toServer(place)).then(() => {
+            resolve();
+          });
+              
     });
   }
   
@@ -65,7 +67,7 @@ export class PlaceStaticService {
     return new Promise<void>((resolve, reject) => {
       
       // Get batches corresponding to place from server
-      this.batchStaticService.getBatchesOnServer('toto')
+      this.batchStaticService.getBatchesOnServer(place.id)
         .then((response: Batch[]) => {
             place.resolvedBatches = response;
             place.areBatchesResolved = true;
@@ -74,4 +76,53 @@ export class PlaceStaticService {
           
     });
   }
+  
+  /**
+   * Compoute weather derived property
+   */
+  public computeWeather(place: Place){
+    
+    // Do nothing if batch are not resolved yet
+    if(!place.areBatchesResolved){
+      return; 
+    }
+    
+    // Check if there are items
+    if(place.resolvedBatches.length === 0){
+      place.computedWeather = 4;
+      return;
+    }
+    
+    // Check number of items in red state
+    let red: number = 0;
+    for(let batch of place.resolvedBatches){
+      if(batch.quantity < batch.lowLimitQuantity){
+        red ++;
+      }
+    }
+    if(red > 1){
+      place.computedWeather = 1;
+      return;
+    }
+    if(red == 1){
+      place.computedWeather = 2;
+      return;
+    }
+    
+    // If needed, check number of items in orange state
+    let orange: number = 0;
+    for(let batch of place.resolvedBatches){
+      if(batch.quantity < batch.goodQuantity){
+        orange ++;
+      }
+    }
+    if(orange/place.resolvedBatches.length > 0.5){
+      place.computedWeather = 3;
+    }
+    else{
+      place.computedWeather = 4;
+    }
+    
+  }
+  
 }

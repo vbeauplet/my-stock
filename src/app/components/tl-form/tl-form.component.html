@@ -58,5 +58,6 @@
   [text]="this.form.button.label"
   [color]="(this.form.button.color == undefined)?'tl-outline':this.form.button.color"
   [disabled]="!this.formOk"
+  [status]="this.submitButtonLoadingStatus"
   (click)="this.submit()">
 </tl-text-stateful-button>

@@ -1,3 +1,84 @@
+<tl-loader
+  *ngIf="!this.areStatsComputed">
+</tl-loader>
+
+<tl-indicator
+  *ngIf="this.areStatsComputed"
+  class="tl-xbig-margined"
+  [icon]="'ion-flame-outline'"
+  [iconSize]="100"
+  [text]="this.totalEnergy + ' kCal'"
+  [textPosition]="'bottom'">
+</tl-indicator>
+
+<tl-indicator
+  *ngIf="this.areStatsComputed"
+  class="tl-xbig-margined"
+  [icon]="'ion-cash-outline'"
+  [iconSize]="100"
+  [text]="this.totalPrice + ' €'"
+  [textPosition]="'bottom'">
+</tl-indicator>
+
+<tl-indicator
+  *ngIf="this.areStatsComputed"
+  class="tl-xbig-margined"
+  [icon]="'ion-pulse-outline'"
+  [iconSize]="100"
+  [text]="this.autonomy + ' jours d\'autonomie'"
+  [textPosition]="'bottom'"
+  [color]="'tl-outline'">
+</tl-indicator>
+
+
+
+<!--  <tl-form
+  [form]="{
+      items: [
+          {
+            id: 'field1',
+            type: 'input-text',
+            label: 'label 1',
+            icon: 'ion-calendar-outline',
+            validationFilter: 'number',
+            validationMessage: 'Le contenu doit être une date valide écrite au format JJ/MM/AAAA. Ex: 09/11/2021'
+          },
+          {
+            id: 'field1.1',
+            type: 'toggler',
+            label: 'Label toggler',
+            ratio: 0.7
+          },
+          {
+            id: 'field1.2',
+            type: 'toggler',
+            label: 'Display toggler',
+            ratio: 0.7
+          },
+          {
+            id: 'field2',
+            type: 'input-text',
+            label: 'label 2'
+          },
+          {
+            id: 'field3',
+            type: 'select',
+            label: 'label 3',
+            proposals: [{ name: 'Proposal 1' },{name: 'Proposal 2'},{name: 'Proposal 3'}]
+          }
+        ],
+      button: {
+        label: 'Send',
+        icon: 'ion-send-outline'
+      }
+    }"
+  [size]="'tl-half-responsive'"
+  [itemsBorderRadius]="'tl-br-infinite'"
+  [primaryStyle]="'tl-soft-transparent'"
+  [secondaryStyle]="'tl-sharp-transparent'">
+</tl-form>
+
+
 <div
   class="tl-near-full-responsive tl-row-dir tl-hor-center tl-vert-center tl-flex-block"
   style="height:700px;">
@@ -15,4 +96,4 @@
     [options]="this.chartOptions">
   </google-chart>
 
-</div>
+</div> -->

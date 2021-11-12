@@ -1,55 +1,29 @@
-<tl-form
-  [form]="{
-      items: [
-          {
-            id: 'field1',
-            type: 'input-text',
-            label: 'label 1',
-            icon: 'ion-calendar-outline',
-            validationFilter: 'number',
-            validationMessage: 'Le contenu doit être une date valide écrite au format JJ/MM/AAAA. Ex: 09/11/2021'
-          },
-          {
-            id: 'field1.1',
-            type: 'toggler',
-            label: 'Label toggler',
-            ratio: 0.7
-          },
-          {
-            id: 'field1.2',
-            type: 'toggler',
-            label: 'Display toggler',
-            ratio: 0.7
-          },
-          {
-            id: 'field2',
-            type: 'input-text',
-            label: 'label 2'
-          },
-          {
-            id: 'field3',
-            type: 'select',
-            label: 'label 3',
-            proposals: [{ name: 'Proposal 1' },{name: 'Proposal 2'},{name: 'Proposal 3'}]
-          }
-        ],
-      button: {
-        label: 'Send',
-        icon: 'ion-send-outline'
-      }
-    }"
-  [size]="'tl-half-responsive'"
-  [itemsBorderRadius]="'tl-br-infinite'"
-  [primaryStyle]="'tl-soft-transparent'"
-  [secondaryStyle]="'tl-sharp-transparent'">
-</tl-form>
+<tl-card
+   *ngIf="!this.place.isUndefined()"
+   class="tl-xbig-bottom-margined"
+   [size]="'tl-xbig'"
+   [tlStyle]="'tl-no-bg-outlined'"
+   [padding]="20">
 
-<!-- Place title -->
-<div
-  *ngIf="!this.place.isUndefined()"
-  class="tl-title tl-big-bottom-margined">
-  {{ this.place.name }}
-</div>
+	<!-- Place title -->
+	<div
+	  class="tl-title tl-big-bottom-margined">
+	  {{ this.place.name }}
+	</div>
+
+	<!-- Place Search Bar -->
+	<tl-input
+	  class="tl-big-bottom-margined"
+	  [size]="'tl-near-full-responsive'"
+	  [tlStyle]="'tl-glassmorphic'"
+	  [placeholder]="'Rechercher un lot'"
+	  [icon]="'ion-search-outline'"
+	  [height]="50"
+	  [validationOn]="false"
+	  (changeValue)="this.searchBatch($event)">
+	</tl-input>
+	
+</tl-card>
 
 <!-- Display loader if place is not resolved yet -->
 <tl-loader
@@ -61,10 +35,14 @@
   *ngIf="!this.place.isUndefined() && this.place.areBatchesResolved"
   class="tl-full tl-row-dir tl-hor-center tl-flex-block">
   
-  <tl-nuki-card
-    *ngFor="let batch of this.place.resolvedBatches"
+  <div
+    *ngIf="this.displayedBatches.length == 0">
+    Aucun lot trouvé
+  </div>
+  
+  <tl-card
+    *ngFor="let batch of this.displayedBatches"
     class="tl-margined"
-    [imageSrc]="'/assets/img/riz.jpg'"
     [size]="'tl-big'"
     [tlStyle]="'tl-glassmorphic'"
     [padding]="20">
@@ -83,8 +61,8 @@
       
         <tl-square-icon
           style="cursor:pointer"
-          class="tl-margined"
-          [size]="25"
+          class="tl-margined" 
+          [size]="30"
           [icon]="'ion-heart-outline'"
           [color]="(batch.favorite)?'tl-outline':'tl-main'">
         </tl-square-icon>
@@ -92,7 +70,7 @@
         <tl-square-icon
           style="cursor:pointer"
           class="tl-margined"
-          [size]="25"
+          [size]="30"
           [icon]="'ion-share-social-outline'">
         </tl-square-icon>
         
@@ -100,46 +78,180 @@
       
     </div>
     
-    <tl-gauge
-      style="margin-top:20px;margin-bottom:30px"
-      [tlStyle]="'tl-glassmorphic'"
-      [size]="'tl-near-full-responsive'"
-      [min]="0"
-      [low]="batch.lowLimitQuantity"
-      [high]="batch.goodQuantity"
-      [max]="batch.highestQuantity"
-      [current]="batch.quantity">
-    </tl-gauge>
-    
     <div
-      class="tl-row-dir tl-vert-center tl-flex-block">
-      
-      <tl-button
-        class="tl-margined"
-        [tlStyle]="'tl-dome'"
-        [icon]="'ion-remove-outline'"
-        (clickButton)="onClickBatchRemove(batch)">
-      </tl-button>
-      
-      <tl-button
-        class="tl-margined"
-        [tlStyle]="'tl-dome'"
-        [icon]="'ion-add-outline'"
-        (clickButton)="onClickBatchAdd(batch)">
-      </tl-button>
-      
-    </div>
+      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
+     
+	    <tl-gauge
+	      class="tl-flex-grow"
+	      [tlStyle]="'tl-glassmorphic'"
+	      [size]="'tl-fit-content'"
+	      [min]="0"
+	      [low]="batch.lowLimitQuantity"
+	      [high]="batch.goodQuantity"
+	      [max]="batch.highestQuantity"
+	      [current]="batch.quantity">
+	    </tl-gauge>
     
-  </tl-nuki-card>
+	    <div
+	      style="margin-left:10px"
+	      class="tl-row-dir tl-vert-center tl-flex-block">
+	      
+	      <tl-button
+	        [tlStyle]="'tl-dome'"
+	        [size]="30"
+	        [icon]="'ion-remove-outline'"
+	        (clickButton)="onClickBatchRemove(batch)">
+	      </tl-button>
+	      
+	      <tl-button
+	        [tlStyle]="'tl-dome'"
+          [size]="30"
+	        [icon]="'ion-add-outline'"
+	        (clickButton)="onClickBatchAdd(batch)">
+	      </tl-button>
+	      
+	    </div>
+	    
+	  </div>
+    
+  </tl-card>
   
 </div>
 
 <!-- Button to add a new batch -->
-<tl-button
+<div
   *ngIf="!this.place.isUndefined()"
-  class="tl-xbig-margined"
+  class="new-batch-button tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
+  
+  <div
+    style="margin-right:10px"
+    class="new-batch-button-label"
+    [class.hidden]="this.newBatchButtonLabelStatus === 1"
+    [class.none]="this.newBatchButtonLabelStatus === 2">
+    Ajouter un lot
+  </div>
+  
+	<tl-button
+	  [tlStyle]="'tl-glassmorphic'"
+	  [size]="60"
+	  [icon]="'ion-add-outline'"
+	  [color]="'tl-success'"
+	  (clickButton)="this.displayNewBatchPopup = true">
+	</tl-button>
+	
+</div>
+
+<!-- Popup to create new batch -->
+<tl-popup-overlay
+  [display]="this.displayNewBatchPopup"
   [tlStyle]="'tl-glassmorphic'"
-  [size]="50"
-  [label]="'Nouveau'"
-  [icon]="'ion-add-outline'">
-</tl-button>
+  (close)="this.displayNewBatchPopup = false">
+  
+  <!-- Popup to display -->
+  <tl-card
+    style="overflow:visible"
+    [tlStyle]="'tl-outlined'"
+    [size]="'tl-two-third-responsive'"
+    [padding]="20">
+    
+    <tl-form
+		  [form]="{
+		      items: [
+		          {
+		            id: 'batch-name',
+		            type: 'input-text',
+		            label: 'Nom du lot',
+                icon: 'ion-pricetag-outline'
+		          },
+              {
+                id: 'batch-category',
+                type: 'select',
+                label: 'Catégorie',
+                proposals: [{ name: 'Féculent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}]
+              },
+		          {
+		            id: 'batch-favorite',
+		            type: 'toggler',
+		            label: 'Favori'
+		          },
+              {
+                id: 'batch-quantity',
+                type: 'input-text',
+                label: 'Quantité',
+                icon: 'ion-speedometer-outline',
+                validationFilter: 'integer',
+                validationMessage: 'Le contenu doit être un n ombre entier positif'
+              },
+              {
+                id: 'batch-good-quantity',
+                type: 'input-text',
+                label: 'Quantité cible minimum',
+                icon: 'ion-battery-half-outline',
+                validationFilter: 'integer',
+                validationMessage: 'Le contenu doit être un n ombre entier positif'
+              },
+              {
+                id: 'batch-highest-quantity',
+                type: 'input-text',
+                label: 'Quantité cible maximum ',
+                icon: 'ion-battery-full-outline',
+                validationFilter: 'integer',
+                validationMessage: 'Le contenu doit être un n ombre entier positif'
+              },
+              {
+                id: 'batch-low-quantity',
+                type: 'input-text',
+                label: 'Quantité minimale',
+                icon: 'ion-battery-dead-outline',
+                validationFilter: 'integer',
+                validationMessage: 'Le contenu doit être un n ombre entier positif'
+              },
+              {
+                id: 'batch-date',
+                type: 'input-text',
+                label: 'Date d\'expiration',
+                icon: 'ion-calendar-outline',
+                validationFilter: 'date',
+                validationMessage: 'Le contenu doit être une date valide écrite au format JJ/MM/AAAA. Ex: 09/11/2021'
+              },
+              {
+                id: 'batch-weight',
+                type: 'input-text',
+                label: 'Poids d\'un produit (kg)',
+                icon: 'ion-barbell-outline',
+                validationFilter: 'number',
+                validationMessage: 'Le contenu doit être un nombre decimal (poids en kg)'
+              },
+              {
+                id: 'batch-energy',
+                type: 'input-text',
+                label: 'Nombre de calories/kg',
+                icon: 'ion-flame-outline',
+                validationFilter: 'integer',
+                validationMessage: 'Le contenu doit être un entier positif'
+              },
+              {
+                id: 'batch-price',
+                type: 'input-text',
+                label: 'Prix par produit',
+                icon: 'ion-cash-outline',
+                validationFilter: 'number',
+                validationMessage: 'Le contenu doit être un nombre décimal (prix en euros)'
+              }
+		        ],
+		      button: {
+		        label: 'Créer',
+		        icon: 'ion-send-outline'
+		      }
+		    }"
+		  [size]="'tl-half-responsive'"
+		  [itemsBorderRadius]="'tl-br-infinite'"
+		  [primaryStyle]="'tl-neumorphic-inset-sharp'"
+		  [secondaryStyle]="'tl-neumorphic'"
+		  [submitButtonLoadingStatus]="this.newBatchPopupLoadingStatus"
+		  (submitForm)="this.submitNewBatchForm($event)">
+		</tl-form>
+    
+  </tl-card>
+
+</tl-popup-overlay>

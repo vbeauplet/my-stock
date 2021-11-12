@@ -29,13 +29,35 @@
         </div>
         
         <tl-spinner
-          *ngIf="!place.areBatchesResolved">
+          *ngIf="place.computedWeather === 0">
         </tl-spinner>
         
         <tl-square-icon
-          *ngIf="place.areBatchesResolved"
+          *ngIf="place.computedWeather === 1"
+          [icon]="'ion-thunderstorm-outline'"
+          [size]="25"
+          [color]="'tl-failure'">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          *ngIf="place.computedWeather === 2"
+          [icon]="'ion-rainy-outline'"
+          [size]="25"
+          [color]="'tl-neutral'">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          *ngIf="place.computedWeather === 3"
           [icon]="'ion-partly-sunny-outline'"
-          [size]="25">
+          [size]="25"
+          [color]="'tl-success'">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          *ngIf="place.computedWeather === 4"
+          [icon]="'ion-sunny-outline'"
+          [size]="25"
+          [color]="'tl-success'">
         </tl-square-icon>
         
       </div>
@@ -67,12 +89,74 @@
 </div>
 
 <!-- Button to add a new place -->
-<tl-button
-  *ngIf="this.stockService.isLoaded"
-  class="tl-xbig-margined"
-  [tlStyle]="'tl-glassmorphic'"
-  [size]="50"
-  [label]="'Nouveau'"
-  [icon]="'ion-add-outline'">
-</tl-button>
+<div
+  class="new-place-button tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
   
+  <div
+    style="margin-right:10px"
+    class="new-place-button-label"
+    [class.hidden]="this.newPlaceButtonLabelStatus === 1"
+    [class.none]="this.newPlaceButtonLabelStatus === 2">
+    Ajouter une pièce
+  </div>
+  
+  <tl-button
+    [tlStyle]="'tl-glassmorphic'"
+    [size]="60"
+    [icon]="'ion-add-outline'"
+    [color]="'tl-success'"
+    (clickButton)="this.displayNewPlacePopup = true">
+  </tl-button>
+  
+</div>
+
+<!-- Popup to create new place -->
+<tl-popup-overlay
+  [display]="this.displayNewPlacePopup"
+  [tlStyle]="'tl-glassmorphic'"
+  (close)="this.displayNewPlacePopup = false">
+  
+  <!-- Popup to display -->
+  <tl-card
+    style="overflow:visible"
+    [tlStyle]="'tl-outlined'"
+    [size]="'tl-two-third-responsive'"
+    [padding]="20">
+    
+    <tl-form
+      [form]="{
+          items: [
+              {
+                id: 'place-name',
+                type: 'input-text',
+                label: 'Nom de la pièce',
+                icon: 'ion-pricetag-outline'
+              },
+              {
+                id: 'place-favorite',
+                type: 'toggler',
+                label: 'Favori'
+              },
+              {
+                id: 'place-position',
+                type: 'input-text',
+                label: 'Localisation',
+                icon: 'ion-navigate-circle-outline'
+              }
+            ],
+          button: {
+            label: 'Créer',
+            icon: 'ion-send-outline'
+          }
+        }"
+      [size]="'tl-half-responsive'"
+      [itemsBorderRadius]="'tl-br-infinite'"
+      [primaryStyle]="'tl-neumorphic-inset-sharp'"
+      [secondaryStyle]="'tl-neumorphic'"
+      [submitButtonLoadingStatus]="this.newPlacePopupLoadingStatus"
+      (submitForm)="this.submitNewPlaceForm($event)">
+    </tl-form>
+    
+  </tl-card>
+
+</tl-popup-overlay>

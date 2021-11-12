@@ -40,6 +40,5 @@ export const abstractItemConverter = {
     abstractItem.name = data.name;
     abstractItem.description = data.description;
     abstractItem.favorite = data.favorite;
-    
   }
 }
