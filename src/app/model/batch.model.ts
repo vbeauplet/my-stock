@@ -47,11 +47,6 @@ export class Batch extends AbstractItem {
    */
   public expiryDate: number = 0;
   
-  /**
-   * Batch image URL
-   */
-  public imageUrl: String = '';
-  
   constructor() {
     super()
   }
@@ -61,17 +56,18 @@ export class Batch extends AbstractItem {
  * Creates Place object from server raw data and the other way around if needed
  */
 export const batchConverter = {
-  fromServer(data: any): Batch {
-    let batch = new Batch
-    abstractItemConverter.setFromServer(data, batch);
-    batch.quantity = data.quantity;
-    batch.lowLimitQuantity = data.lowLimitQuantity;
-    batch.highestQuantity = data.lowLimitQuantity;
-    batch.goodQuantity = data.goodQuantity;
-    batch.weight = data.weight;
-    batch.energy = data.energy;
-    batch.expiryDate = data.expiryDate;
-    batch.imageUrl = data.imageUrl;
-    return batch;
-  }
+  fromServer: function(data: any){
+    
+      let batch = new Batch
+      abstractItemConverter.setFromServer(data, batch);
+      batch.quantity = data.quantity;
+      batch.lowLimitQuantity = data.lowLimitQuantity;
+      batch.highestQuantity = data.highestQuantity;
+      batch.goodQuantity = data.goodQuantity;
+      batch.weight = data.weight;
+      batch.energy = data.energy;
+      batch.expiryDate = data.expiryDate;
+      
+      return batch;
+    }
 }

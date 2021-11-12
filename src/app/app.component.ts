@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ITlMenuItem, ITlTheme, TlMenuService, TlThemeService } from 'ngx-tl-common';
+import { initializeApp } from "firebase/app";
+import { AppService } from './services/app.service';
 
 @Component({
   selector: 'app-root',
@@ -73,7 +75,24 @@ export class AppComponent {
   constructor(
     public router: Router,
     public menuService: TlMenuService,
-    public themeService: TlThemeService) {}
+    public themeService: TlThemeService,
+    public appService: AppService) {
+      
+      // Configure firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyC9MLc19dgPr2M_1t29wzNYCBm8x16OLZE",
+        authDomain: "my-personal-stock.firebaseapp.com",
+        projectId: "my-personal-stock",
+        storageBucket: "my-personal-stock.appspot.com",
+        messagingSenderId: "66957192486",
+        appId: "1:66957192486:web:2971449e8c8bb87fa865e7",
+        measurementId: "G-1P49T1PSPS"
+      };
+      
+      // Initialize Firebase
+      const firebaseApp: any = initializeApp(firebaseConfig);
+      this.appService.firebaseApp = firebaseApp;
+    }
     
   ngOnInit() {
     // Initialize app menu
