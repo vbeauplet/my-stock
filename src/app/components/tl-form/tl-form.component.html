@@ -4,10 +4,13 @@
   <tl-input
     *ngIf="item.type == 'input-text'"
     class="item"
+    [class.filled]="this.getState(item.id).value != undefined && this.getState(item.id).value != ''"
     [size]="'tl-full'"
     [borderRadius]="this.itemsBorderRadius"
     [tlStyle]="this.primaryStyle"
     [placeholder]="item.label"
+    [lingeringPlaceholder]="true"
+    [initialValue]="item.initialValue"
     [icon]="(item.icon == undefined)?undefined:item.icon"
     [height]="50"
     [validationOn]="this.activateItemValidation"
@@ -26,6 +29,7 @@
     [containerStyle]="this.primaryStyle"
     [buttonStyle]="this.secondaryStyle"
     [buttonContainerRatio]="(item.ratio == undefined)?1:item.ratio"
+    [initialState]="item.initialValue"
     (toggleOn)="onChangeValue(item.id, true)"
     (toggleOff)="onChangeValue(item.id, false)">
   </tl-toggler>
@@ -42,6 +46,7 @@
     [height]="'50px'"
     [proposals]="item.proposals"
     [validationOn]="this.activateItemValidation"
+    [initialSelectedProposal]="(item.initialValue != undefined)?{name: item.initialValue}:null"
     (selectProposal)="this.onChangeValue(item.id, $event.name)"
     (reset)="this.onChangeValue(item.id, undefined)"
     (changeValidationStatus)="onChangeStatus(item.id, $event)">
@@ -51,6 +56,7 @@
 
 <tl-text-stateful-button
   *ngIf="this.form.button != undefined"
+  class="form-button"
   [class]="this.buttonBorderRadius"
   [size]="(this.form.button.size == undefined)?'tl-fit-content':this.form.button.size"
   [tlStyle]="this.secondaryStyle"

@@ -17,6 +17,7 @@
 	  [size]="'tl-near-full-responsive'"
 	  [tlStyle]="'tl-glassmorphic'"
 	  [placeholder]="'Rechercher un lot'"
+    [lingeringPlaceholder]="true"
 	  [icon]="'ion-search-outline'"
 	  [height]="50"
 	  [validationOn]="false"
@@ -40,13 +41,10 @@
     Aucun lot trouvé
   </div>
   
-  <tl-card
+  <div
     *ngFor="let batch of this.displayedBatches"
-    class="tl-margined"
-    [size]="'tl-big'"
-    [tlStyle]="'tl-glassmorphic'"
-    [padding]="20">
-    
+    class="tl-margined tl-big tl-soft-transparent tl-container-flex-block tl-big-padded">
+   
     <div
       class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
         
@@ -71,7 +69,15 @@
           style="cursor:pointer"
           class="tl-margined"
           [size]="30"
-          [icon]="'ion-share-social-outline'">
+          [icon]="'ion-create-outline'"
+          (click)="this.onClickBatchEdit(batch)">
+        </tl-square-icon>
+        
+        <tl-square-icon
+          style="cursor:pointer"
+          class="tl-margined"
+          [size]="30"
+          [icon]="'ion-trash-outline'">
         </tl-square-icon>
         
       </div>
@@ -83,7 +89,7 @@
      
 	    <tl-gauge
 	      class="tl-flex-grow"
-	      [tlStyle]="'tl-glassmorphic'"
+	      [tlStyle]="'tl-soft-transparent'"
 	      [size]="'tl-fit-content'"
 	      [min]="0"
 	      [low]="batch.lowLimitQuantity"
@@ -114,9 +120,16 @@
 	    
 	  </div>
     
-  </tl-card>
+  </div>
   
 </div>
+
+<a
+  *ngIf="this.showLoadMoreButton"
+  class="tl-big-margined"
+  (click)="this.onClickShowMore()">
+  Voir plus
+</a>
 
 <!-- Button to add a new batch -->
 <div
@@ -144,8 +157,8 @@
 <!-- Popup to create new batch -->
 <tl-popup-overlay
   [display]="this.displayNewBatchPopup"
-  [tlStyle]="'tl-glassmorphic'"
-  (close)="this.displayNewBatchPopup = false">
+  [tlStyle]="'tl-sharp-transparent'"
+  (close)="this.onClickClosePopup()">
   
   <!-- Popup to display -->
   <tl-card
@@ -155,24 +168,28 @@
     [padding]="20">
     
     <tl-form
+      *ngIf="this.displayNewBatchPopup"
 		  [form]="{
 		      items: [
 		          {
 		            id: 'batch-name',
 		            type: 'input-text',
 		            label: 'Nom du lot',
-                icon: 'ion-pricetag-outline'
+                icon: 'ion-pricetag-outline',
+                initialValue: this.editedBatch.name
 		          },
               {
                 id: 'batch-category',
                 type: 'select',
-                label: 'Catégorie',
-                proposals: [{ name: 'Féculent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}]
+                label: 'Cat�gorie',
+                proposals: [{ name: 'F�culent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}],
+                initialValue: this.editedBatch.category
               },
 		          {
 		            id: 'batch-favorite',
 		            type: 'toggler',
-		            label: 'Favori'
+		            label: 'Favori',
+                initialValue: this.editedBatch.favorite
 		          },
               {
                 id: 'batch-quantity',
@@ -180,7 +197,8 @@
                 label: 'Quantité',
                 icon: 'ion-speedometer-outline',
                 validationFilter: 'integer',
-                validationMessage: 'Le contenu doit être un n ombre entier positif'
+                validationMessage: 'Le contenu doit être un n ombre entier positif',
+                initialValue: this.editedBatch.quantity
               },
               {
                 id: 'batch-good-quantity',
@@ -188,7 +206,8 @@
                 label: 'Quantité cible minimum',
                 icon: 'ion-battery-half-outline',
                 validationFilter: 'integer',
-                validationMessage: 'Le contenu doit être un n ombre entier positif'
+                validationMessage: 'Le contenu doit être un n ombre entier positif',
+                initialValue: this.editedBatch.goodQuantity
               },
               {
                 id: 'batch-highest-quantity',
@@ -196,7 +215,8 @@
                 label: 'Quantité cible maximum ',
                 icon: 'ion-battery-full-outline',
                 validationFilter: 'integer',
-                validationMessage: 'Le contenu doit être un n ombre entier positif'
+                validationMessage: 'Le contenu doit être un n ombre entier positif',
+                initialValue: this.editedBatch.highestQuantity
               },
               {
                 id: 'batch-low-quantity',
@@ -204,15 +224,8 @@
                 label: 'Quantité minimale',
                 icon: 'ion-battery-dead-outline',
                 validationFilter: 'integer',
-                validationMessage: 'Le contenu doit être un n ombre entier positif'
-              },
-              {
-                id: 'batch-date',
-                type: 'input-text',
-                label: 'Date d\'expiration',
-                icon: 'ion-calendar-outline',
-                validationFilter: 'date',
-                validationMessage: 'Le contenu doit être une date valide écrite au format JJ/MM/AAAA. Ex: 09/11/2021'
+                validationMessage: 'Le contenu doit être un n ombre entier positif',
+                initialValue: this.editedBatch.lowLimitQuantity
               },
               {
                 id: 'batch-weight',
@@ -220,7 +233,8 @@
                 label: 'Poids d\'un produit (kg)',
                 icon: 'ion-barbell-outline',
                 validationFilter: 'number',
-                validationMessage: 'Le contenu doit être un nombre decimal (poids en kg)'
+                validationMessage: 'Le contenu doit être un nombre decimal (poids en kg)',
+                initialValue: this.editedBatch.weight
               },
               {
                 id: 'batch-energy',
@@ -228,7 +242,8 @@
                 label: 'Nombre de calories/kg',
                 icon: 'ion-flame-outline',
                 validationFilter: 'integer',
-                validationMessage: 'Le contenu doit être un entier positif'
+                validationMessage: 'Le contenu doit être un entier positif',
+                initialValue: this.editedBatch.energy
               },
               {
                 id: 'batch-price',
@@ -236,11 +251,12 @@
                 label: 'Prix par produit',
                 icon: 'ion-cash-outline',
                 validationFilter: 'number',
-                validationMessage: 'Le contenu doit être un nombre décimal (prix en euros)'
+                validationMessage: 'Le contenu doit être un nombre décimal (prix en euros)',
+                initialValue: this.editedBatch.price
               }
 		        ],
 		      button: {
-		        label: 'Créer',
+		        label: (this.editedBatch.id == undefined)?'Créer':'Modifier',
 		        icon: 'ion-send-outline'
 		      }
 		    }"
@@ -249,7 +265,7 @@
 		  [primaryStyle]="'tl-neumorphic-inset-sharp'"
 		  [secondaryStyle]="'tl-neumorphic'"
 		  [submitButtonLoadingStatus]="this.newBatchPopupLoadingStatus"
-		  (submitForm)="this.submitNewBatchForm($event)">
+		  (submitForm)="this.submitBatchForm($event)">
 		</tl-form>
     
   </tl-card>

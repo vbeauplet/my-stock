@@ -33,6 +33,16 @@ export class PlaceViewComponent implements OnInit {
   public displayedBatches: Batch[] = [];
 
   /**
+   * Max number of batch to display on view 
+   */
+  public maxDisplayIndex = 10;
+  
+  /**
+   * Tells if the "load more" button shall be visible
+   */
+  public showLoadMoreButton = false;
+  
+  /**
    * Tells if the popup to create new batch shall be displayed
    */
   public displayNewBatchPopup: boolean = false;
@@ -49,6 +59,11 @@ export class PlaceViewComponent implements OnInit {
    * Loading status of the new batch popup submit button
    */
   public newBatchPopupLoadingStatus: number = -1;
+  
+  /**
+   * Batch being edited
+   */
+  public editedBatch: Batch = new Batch();
 
   constructor(
       private route: ActivatedRoute,
@@ -113,36 +128,75 @@ export class PlaceViewComponent implements OnInit {
   }
 
   /**
-   * Submit form to add new batch to current place
+   * Handles click on "show more" button
    */
-  public submitNewBatchForm(formStates: ITlFormItemState[]){
+  public onClickShowMore(){
+    let newMaxIndex: number = this.maxDisplayIndex + 10;
+    let batchesToAdd: Batch[] = this.place.resolvedBatches.slice(this.maxDisplayIndex, newMaxIndex)
+    for(let batch of batchesToAdd){
+      this.displayedBatches.push(batch);
+    }
+    this.maxDisplayIndex = newMaxIndex;
+  }
+  
+  /**
+   * Handles click on the edition button over a batch
+   */
+  public onClickBatchEdit(batch: Batch){
+    
+    // Set edited batch
+    this.editedBatch = batch;
+    
+    // Open popup
+    this.displayNewBatchPopup = true;
+  }
+  
+  /**
+   * Handles click on the close button when editing a batch
+   */
+  public onClickClosePopup(){
+    
+    // Set edited batch
+    this.editedBatch = new Batch();
+    
+    // Close popup
+    this.displayNewBatchPopup = false;
+  }
 
-    // Tell loading
-    this.newBatchPopupLoadingStatus = 0;
+  /**
+   * Submit form to add or edit batch to current place
+   */
+  public submitBatchForm(formStates: ITlFormItemState[]){
 
-    // Create new Batch from form content
-    let newBatch: Batch = new Batch();
-    newBatch.id = this.tlHelpersService.generateId();
-    newBatch.name = this.getState('batch-name', formStates).value;
-    newBatch.favorite = this.getState('batch-favorite', formStates).value;
-    newBatch.category = this.getState('batch-category', formStates).value;
-    newBatch.quantity = this.getState('batch-quantity', formStates).value;
-    newBatch.lowLimitQuantity = this.getState('batch-low-quantity', formStates).value;
-    newBatch.highestQuantity = this.getState('batch-highest-quantity', formStates).value;
-    newBatch.goodQuantity = this.getState('batch-good-quantity', formStates).value;
-    newBatch.weight = this.getState('batch-weight', formStates).value;
-    newBatch.energy = this.getState('batch-energy', formStates).value;
-    newBatch.price = this.getState('batch-price', formStates).value;
+    // If this is a creation, generate ID
+    if(this.editedBatch.isUndefined()){
+      this.editedBatch.id = this.tlHelpersService.generateId();
+    }
+    
+    console.log(this.editedBatch.id);
+
+    // Create or update Batch from form content
+    let batch: Batch = this.editedBatch
+    batch.name = this.getState('batch-name', formStates).value;
+    batch.favorite = this.getState('batch-favorite', formStates).value;
+    batch.category = this.getState('batch-category', formStates).value;
+    batch.quantity = this.getState('batch-quantity', formStates).value;
+    batch.lowLimitQuantity = this.getState('batch-low-quantity', formStates).value;
+    batch.highestQuantity = this.getState('batch-highest-quantity', formStates).value;
+    batch.goodQuantity = this.getState('batch-good-quantity', formStates).value;
+    batch.weight = this.getState('batch-weight', formStates).value;
+    batch.energy = this.getState('batch-energy', formStates).value;
+    batch.price = this.getState('batch-price', formStates).value;
     
     // Add new batch on server
-    this.batchStaticService.addBatchOnServer(this.place.id, newBatch).then(() => {
+    this.batchStaticService.setBatchOnServer(this.place.id, batch).then(() => {
     	this.stockService.reload();
       this.newBatchPopupLoadingStatus = 1;
       setTimeout(() => {
           this.displayNewBatchPopup = false;
           this.newBatchPopupLoadingStatus = -1;
           setTimeout(() => {
-            this.tlAlertService.raiseInfo('Nouveau lot "'+ newBatch.name + '" ajouté dans la pièce');
+            this.tlAlertService.raiseInfo('Nouveau lot "'+ batch.name + '" ajouté dans la pièce');
           }, 500)
       }, 700);
     })
@@ -152,12 +206,17 @@ export class PlaceViewComponent implements OnInit {
    * Updates displayed batches from free search
    */
   public searchBatch(search: string){
+    if(search.length < 2){
+      this.resetDisplayedBatches();
+      return;
+    }
 	  let temp: Batch[] = [];
     for(let batch of this.place.resolvedBatches){
     	if(batch.name.toLowerCase().includes(search.toLowerCase())){
 	      temp.push(batch);
       }
     }
+    this.showLoadMoreButton = false;
     this.displayedBatches = temp;
   }
 
@@ -165,7 +224,11 @@ export class PlaceViewComponent implements OnInit {
    * Reset displayed batches from source PLace object
    */
   private resetDisplayedBatches(){
-  	this.displayedBatches = [... this.place.resolvedBatches];
+    this.maxDisplayIndex = 10;
+  	this.displayedBatches = [... this.place.resolvedBatches.slice(0,this.maxDisplayIndex)];
+    if(this.maxDisplayIndex < this.place.resolvedBatches.length) {
+      this.showLoadMoreButton = true;
+    }
   }
 
   /**

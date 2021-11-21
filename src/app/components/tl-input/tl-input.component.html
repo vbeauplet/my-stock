@@ -4,12 +4,24 @@
   [class]="this.tlStyle + ' ' + this.borderRadius + ' form-input'"
   [class.valid]="this.validationStatus == 1"
   [class.invalid]="this.validationStatus == 2"
-  [placeholder]="this.placeholder"
+  [placeholder]="(this.lingeringPlaceholder)?'':this.placeholder"
   [ngStyle]="{
       'height': this.height + 'px'
     }"
   (keyup)="this.onPressKey($event)">
-  
+
+<!-- Lingering placehoder, if any -->
+<div
+  *ngIf="this.lingeringPlaceholder"
+  class="tl-regular-content form-label"
+  [class.top]="this.currentValue != ''"
+  [ngStyle]="{
+      'top': 7/24*this.height + 'px'
+    }"
+  (click)="this.focus()">
+  {{ this.placeholder }}
+</div>
+
 <!-- Icon, if any -->
 <tl-square-icon
   *ngIf="this.icon != undefined"
@@ -19,7 +31,8 @@
   [ngStyle]="{
       'top': 1/4*this.height + 'px',
       'right': 1/4*this.height + 4 + 'px'
-    }">
+    }"
+  (click)="this.focus()">
 </tl-square-icon>
 
 <!-- Validation message, if any -->

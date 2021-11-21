@@ -10,7 +10,7 @@ export interface ITlFormItem {
   validationMessage?: string,
   initialValue?: any,
   ratio?:number,
-  proposal?: any[]
+  proposals?: any[]
 }
 
 export interface ITlFormButton {
@@ -120,9 +120,8 @@ export class TlFormComponent implements OnInit {
           id: item.id,
           optional: item.optional,
           status: (item.type == 'toggler')?1:0,
-          value: (item.type == 'toggler')?false:item.initialValue
+          value: this.getInitialValue(item)
         });
-        
     }
   }
   
@@ -165,14 +164,15 @@ export class TlFormComponent implements OnInit {
     
     // Set new form validation status
     this.formOk = tempFormOk
-    
   }
   
   /**
    * Submit form
    */
   public submit(){
-    this.submitForm.next(this.formState);
+    if(this.formOk){
+      this.submitForm.next(this.formState);
+    }
   }
   
   /**
@@ -221,4 +221,13 @@ export class TlFormComponent implements OnInit {
     return null;
   }
 
+
+  private getInitialValue(item: ITlFormItem): any{
+    if(item.type == 'toggler'){
+      if(item.initialValue == undefined){
+        return false;
+      }
+    }
+    return item.initialValue;
+  }
 }

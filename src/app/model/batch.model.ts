@@ -10,47 +10,47 @@ export class Batch extends AbstractItem {
   /**
    * Batch category
    */
-  public category: String = '';
+  public category: string;
   
   /**
    * Number of unitary elements within batch
    */
-  public quantity: number = 0;
+  public quantity: number;
   
   /**
    * Low limit quantity
    */
-  public lowLimitQuantity: number = 0;
+  public lowLimitQuantity: number;
   
   /**
    * Highest quantity to be displayed on batch gauge
    */
-  public highestQuantity: number = 0;
+  public highestQuantity: number;
   
   /**
    * Good enough quantity
    */
-  public goodQuantity: number = 0;
+  public goodQuantity: number;
   
   /**
    * Weight of an element within batch
    */
-  public weight: number = 0;
+  public weight: number;
   
   /**
    * Energy per kg of the item within batch
    */
-  public energy: number = 0;
+  public energy: number;
   
   /**
    * Price, in euros of a batch product
    */
-  public price: number = 0;
+  public price: number;
   
   /**
    * Batch expiry date
    */
-  public expiryDate: number = 0;
+  public expiryDate: string;
   
   constructor() {
     super()

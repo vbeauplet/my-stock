@@ -70,6 +70,16 @@ export class TlInputComponent implements OnInit {
   @Input() placeholder: string  = '';
   
   /**
+   * Initial value content of the input
+   */
+  @Input() initialValue: string = undefined;
+  
+  /**
+   * Tells if plachoder shall linger whenever user has written an input
+   */
+  @Input() lingeringPlaceholder: boolean = false;
+  
+  /**
    * Potential icon to display within the input, undefined if none (default)
    */
   @Input() icon: string = undefined;
@@ -104,6 +114,11 @@ export class TlInputComponent implements OnInit {
   @Output() changeValidationStatus: EventEmitter<number> = new EventEmitter<number>();
   
   /**
+   * Curretn form value
+   */
+  public currentValue: string = '';
+  
+  /**
    * Tells if input is valid with regards to filters
    * 0 unchecked or no set
    * 1 ok
@@ -125,12 +140,21 @@ export class TlInputComponent implements OnInit {
     
     // Set internal ID
     this.internalId = this.tlHelpersService.generateId();
+    
+    // Set initial value, if any
+    if(this.initialValue != undefined){
+      setTimeout(() => {
+        document.getElementById(this.internalId).setAttribute('value', this.initialValue);
+        this.currentValue = this.initialValue;
+        this.check();
+      }, 50);
+    }
   }
   
   /**
-   * Checks a value against input filters and update input state accordingly
+   * Checks the current value against input filters and update input state accordingly
    */
-  public check(value: string){
+  public check(){
     
     // Only check if validation is activated
     if(!this.validationOn){
@@ -146,31 +170,31 @@ export class TlInputComponent implements OnInit {
       
       // Check predefined filters
       if(filter == 'number'){
-        if(!NUMBER_REGEXP.test(value)){
+        if(!NUMBER_REGEXP.test(this.currentValue)){
           tempStatus = 2;
           break;
         }
       }
       else if(filter == 'integer'){
-        if(!INTEGER_REGEXP.test(value)){
+        if(!INTEGER_REGEXP.test(this.currentValue)){
           tempStatus = 2;
           break;
-        }
+        } 
       }
       else if(filter == 'date'){
-        if(!DATE_REGEXP.test(value)){
+        if(!DATE_REGEXP.test(this.currentValue)){
           tempStatus = 2;
           break;
         }
       }
       else if(filter == 'password'){
-        if(!PASSWORD_REGEXP.test(value)){
+        if(!PASSWORD_REGEXP.test(this.currentValue)){
           tempStatus = 2;
           break;
         }
       }
       else if(filter == 'nospace'){
-        if(!NOSPACE_REGEXP.test(value)){
+        if(!NOSPACE_REGEXP.test(this.currentValue)){
           tempStatus = 2;
           break;
         }
@@ -179,7 +203,7 @@ export class TlInputComponent implements OnInit {
       // Else use regexp
       else {
         let regexpFilter: RegExp = new RegExp(filter)
-        if(!regexpFilter.test(value)){
+        if(!regexpFilter.test(this.currentValue)){
           tempStatus = 2;
           break;
         }
@@ -207,11 +231,21 @@ export class TlInputComponent implements OnInit {
     // Retrieve value
     let inputValue: string = event.target.value;
    
+    // Set current value
+    this.currentValue = inputValue;
+   
     // Emit the change value event
-    this.changeValue.next(inputValue);
+    this.changeValue.next(this.currentValue);
     
     // Check value against filters, if any
-    this.check(inputValue)
+    this.check();
+  }
+  
+  /**
+   * Focuses the input
+   */
+  public focus(){
+    document.getElementById(this.internalId).focus();
   }
 
 }

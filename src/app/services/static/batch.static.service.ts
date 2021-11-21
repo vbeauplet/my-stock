@@ -49,9 +49,9 @@ export class BatchStaticService {
   /**
    * Add a batch on server
    *
-   * Returns the request promise so that we now when over
+   * Returns the request promise so that we know when over
    */
-  public addBatchOnServer(placeId: String, batch: Batch): Promise<void>{
+  public setBatchOnServer(placeId: String, batch: Batch): Promise<void>{
     return new Promise<void>(async (resolve) => {
       
       const db = getFirestore(this.appService.firebaseApp);

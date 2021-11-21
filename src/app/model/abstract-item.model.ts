@@ -8,29 +8,29 @@ export abstract class AbstractItem {
   /**
    * Object ID
    */
-  public id: string = '';
+  public id: string;
 
   /**
    * Object name
    */
-  public name: string = ''
+  public name: string;
 
   /**
    * Object description
    */
-  public description: string = '';
+  public description: string;
   
   /**
    * Tells if this object has a favorite flag on
    */
-  public favorite: boolean = false;
+  public favorite: boolean;
   
   constructor() {
     // Nothing to do here
   }
   
   public isUndefined(): boolean {
-    return this.id == '';
+    return this.id == undefined;
   }
 }
 
