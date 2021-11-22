@@ -7,10 +7,12 @@
   
   <tl-square-icon
     class="bouncing-icon off"
-    [class.bounced]="this.iconOffBounced"
     [class.transparent]="this.state"
     [size]="this.size"
     [icon]="this.icon"
+    [ngStyle]="{
+        'transform': (this.iconOffBounced)?'scale(' + this.bouncingRatio + ')':'scale(1)'
+      }"
     (click)="this.bounce()">
   </tl-square-icon>
   

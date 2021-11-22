@@ -34,6 +34,13 @@ export class TlIconTogglerComponent implements OnInit {
   @Input() iconOn: string = undefined;
 
   /**
+   * Bounding ratio
+   * 1.8 by default
+   */
+  @Input() bouncingRatio: number = 1.8;
+  
+  
+  /**
    * Event that is raised when toggler is toggled on
    */
   @Output() toggleOn: EventEmitter<any> = new EventEmitter();
