@@ -18,6 +18,8 @@ import { TlGaugeComponent } from './components/tl-gauge/tl-gauge.component';
 import { TlFormComponent } from './components/tl-form/tl-form.component';
 import { TlInputComponent } from './components/tl-input/tl-input.component';
 import { TlSelectComponent } from './components/tl-select/tl-select.component';
+import { TlIconTogglerComponent } from './components/tl-icon-toggler/tl-icon-toggler.component';
+import { TlMobileMenuComponent } from './components/tl-mobile-menu/tl-mobile-menu.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { TlSelectComponent } from './components/tl-select/tl-select.component';
     PlaceViewComponent,
     TlFormComponent,
     TlInputComponent,
-    TlSelectComponent
+    TlSelectComponent,
+    TlIconTogglerComponent,
+    TlMobileMenuComponent
   ],
   imports: [
     BrowserModule,

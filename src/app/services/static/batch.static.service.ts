@@ -64,6 +64,22 @@ export class BatchStaticService {
   }
   
   /**
+   * Set favorite flag of a batch on server
+   *
+   * Returns the request promise so that we now when ok
+   */
+  public setBatchFavoriteFlagOnServer(placeId: String, batch: Batch, favorite: boolean): Promise<void>{
+    return new Promise<void>(async (resolve) => {
+      const db = getFirestore(this.appService.firebaseApp);
+      const batchRef = doc(db, '/places/' + placeId + '/batches', batch.id);
+      await updateDoc(batchRef, {favorite: favorite}).then(() => {
+            resolve();
+          });
+              
+    });
+  }
+  
+  /**
    * Increment a batch quantity on server
    *
    * Returns the request promise so that we now when ok

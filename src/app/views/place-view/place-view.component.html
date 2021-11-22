@@ -43,27 +43,28 @@
   
   <div
     *ngFor="let batch of this.displayedBatches"
-    class="tl-margined tl-big tl-soft-transparent tl-container-flex-block tl-big-padded">
+    class="batch-card tl-margined tl-big tl-soft-transparent tl-container-flex-block tl-big-padded">
    
     <div
-      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
+      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-no-wrap tl-flex-block">
         
       <div
-        class="tl-subtitle"
+        class="tl-subtitle tl-flex-grow tl-ellipsis"
         style="margin-right:10px">
         {{ batch.name }}
       </div>
       
       <div
-        class="tl-row-dir tl-vert-center tl-flex-block">
+        class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
       
-        <tl-square-icon
-          style="cursor:pointer"
+        <tl-icon-toggler
           class="tl-margined" 
           [size]="30"
           [icon]="'ion-heart-outline'"
-          [color]="(batch.favorite)?'tl-outline':'tl-main'">
-        </tl-square-icon>
+          [iconOn]="'ion-heart'"
+          [initialState]="batch.favorite"
+          (toggle)="this.onChangeFavoriteFlag(batch, $event)">
+        </tl-icon-toggler>
         
         <tl-square-icon
           style="cursor:pointer"

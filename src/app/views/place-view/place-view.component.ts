@@ -126,6 +126,14 @@ export class PlaceViewComponent implements OnInit {
     batch.quantity--;
     this.placeStaticService.computeWeather(this.place);
   }
+  
+  /**
+   * Handles change on the favorite flag of a batch
+   */
+  public onChangeFavoriteFlag(batch: Batch, newValue: boolean){
+    this.batchStaticService.setBatchFavoriteFlagOnServer(this.place.id, batch, newValue);
+    batch.favorite = newValue;
+  }
 
   /**
    * Handles click on "show more" button
@@ -168,12 +176,12 @@ export class PlaceViewComponent implements OnInit {
    */
   public submitBatchForm(formStates: ITlFormItemState[]){
 
+    this.newBatchPopupLoadingStatus = 0;
+
     // If this is a creation, generate ID
     if(this.editedBatch.isUndefined()){
       this.editedBatch.id = this.tlHelpersService.generateId();
     }
-    
-    console.log(this.editedBatch.id);
 
     // Create or update Batch from form content
     let batch: Batch = this.editedBatch
