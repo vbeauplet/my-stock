@@ -1,0 +1,26 @@
+<div
+  class="bouncing-icon-container"
+  [ngStyle]="{
+      'width': this.size + 'px',
+      'height': this.size + 'px'
+    }">
+  
+  <tl-square-icon
+    class="bouncing-icon off"
+    [class.bounced]="this.iconOffBounced"
+    [class.transparent]="this.state"
+    [size]="this.size"
+    [icon]="this.icon"
+    (click)="this.bounce()">
+  </tl-square-icon>
+  
+  <tl-square-icon
+    class="bouncing-icon on"
+    [class.transparent]="!this.state"
+    [size]="this.size"
+    [icon]="(this.iconOn != undefined)?this.iconOn:this.icon"
+    [color]="this.color"
+    (click)="this.bounce()">
+  </tl-square-icon>
+
+</div>
