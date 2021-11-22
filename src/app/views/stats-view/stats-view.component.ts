@@ -131,6 +131,8 @@ export class StatsViewComponent implements OnInit {
         this.totalPrice += batch.price * batch.quantity;
       }
     }
+    this.totalEnergy = Math.round(this.totalEnergy);
+    this.totalPrice = Math.round(this.totalPrice);
     this.autonomy = Math.round(this.totalEnergy / 9000);
     this.areStatsComputed = true;
   }
