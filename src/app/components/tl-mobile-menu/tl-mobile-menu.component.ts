@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TlMenuService } from 'ngx-tl-common';
+import { TlcMenuService } from 'src/app/services/tl-menu.service';
 
 
 /**
@@ -26,8 +26,13 @@ export class TlMobileMenuComponent implements OnInit {
    */
   @Input() iconSize: number = 40;
   
+  /**
+   * Icon bouncing ratio. Defualt is 1.6
+   */
+  @Input() iconBouncingRatio: number = 1.6;
+  
   constructor(
-    public menuService: TlMenuService
+    public menuService: TlcMenuService
   ) { }
 
   ngOnInit(): void {

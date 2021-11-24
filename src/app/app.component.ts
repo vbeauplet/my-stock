@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ITlMenuItem, ITlTheme, TlMenuService, TlThemeService } from 'ngx-tl-common';
+import { ITlTheme, TlThemeService } from 'ngx-tl-common';
 import { initializeApp } from "firebase/app";
 import { AppService } from './services/app.service';
+import { TlcMenuService } from './services/tl-menu.service';
+import { ITlMenuItem } from './services/tl-menu-item.interface';
 
 @Component({
   selector: 'app-root',
@@ -17,18 +19,21 @@ export class AppComponent {
       id: 'stock',
       label:'Stock',
       icon:'ion-speedometer-outline',
+      iconOn:'ion-speedometer',
       route:'/stock'
     },
     {
       id: 'stats',
       label:'Stats',
       icon:'ion-stats-chart-outline',
+      iconOn:'ion-stats-chart',
       route:'/stats'
     },
     {
       id: 'search',
       label:'Recherche',
       icon:'ion-search-outline',
+      iconOn:'ion-search',
       route:'/search'
     }
   ];
@@ -74,7 +79,7 @@ export class AppComponent {
   
   constructor(
     public router: Router,
-    public menuService: TlMenuService,
+    public menuService: TlcMenuService,
     public themeService: TlThemeService,
     public appService: AppService) {
       

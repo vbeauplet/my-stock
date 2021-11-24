@@ -14,8 +14,22 @@ export class TlIconTogglerComponent implements OnInit {
   
   /**
    * Initial state of the icon toggler
+   * Use of an input property setter to handle initial value change if synchrone state is set
    */
-  @Input() initialState: boolean = false;
+  private _initialState: boolean = false;
+  @Input() set initialState(value: boolean) {
+     this._initialState = value;
+     
+     // Only deal with initial value hange if component is synchrone
+     if(this.synchrone){
+       if(this._initialState){
+         this.bounceOn();
+       }
+       else{
+         this.bounceOff();
+       }
+     }
+  }
   
   /**
    * Accentuation color of the icon when toggled on
@@ -39,6 +53,15 @@ export class TlIconTogglerComponent implements OnInit {
    */
   @Input() bouncingRatio: number = 1.8;
   
+  /**
+   * Tells if component is synchrone, which means reacts to any inital state change
+   */
+  @Input() synchrone: boolean = false;
+  
+  /**
+   * Prevents click event and action
+   */
+  @Input() unclickable: boolean = false;
   
   /**
    * Event that is raised when toggler is toggled on
@@ -78,22 +101,41 @@ export class TlIconTogglerComponent implements OnInit {
    */
   public bounce(){
     
-    // If toggler is in "off" state
-    if(!this.state){
-      this.state = true;
-      this.toggleOn.next();
-      this.toggle.next(true);
-      this.iconOffBounced = true;
-      setTimeout(() => {
-          this.iconOffBounced = false;
-        }, 500);
+    if(!this.unclickable){
+      
+      // If toggler is in "off" state
+      if(!this.state){
+        this.bounceOn();
+      }
+      
+      // If toggler is in "on" state
+      else{
+        this.bounceOff();
+      }
+      
     }
     
-    // If toggler is in "on" state
-    else{
-      this.state = false;
-      this.toggleOff.next();
-      this.toggle.next(false);
-    }
+  }
+  
+  /**
+   * Bounces on the icon toggler
+   */
+  public bounceOn(){
+    this.state = true;
+    this.toggleOn.next();
+    this.toggle.next(true);
+    this.iconOffBounced = true;
+    setTimeout(() => {
+        this.iconOffBounced = false;
+      }, 500);
+  }
+  
+  /**
+   * Bounces off the icon toggler
+   */
+  public bounceOff(){
+    this.state = false;
+    this.toggleOff.next();
+    this.toggle.next(false);
   }
 }
