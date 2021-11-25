@@ -30,6 +30,13 @@ export class AppComponent {
       route:'/stats'
     },
     {
+      id: 'shopping',
+      label:'Liste',
+      icon:'ion-receipt-outline',
+      iconOn:'ion-receipt',
+      route:'/shopping'
+    },
+    {
       id: 'search',
       label:'Recherche',
       icon:'ion-search-outline',

@@ -31,6 +31,11 @@ export class TlMobileMenuComponent implements OnInit {
    */
   @Input() iconBouncingRatio: number = 1.6;
   
+  /**
+   * Tells if menu label shall be shown
+   */
+  @Input() showLabel: boolean = true;
+  
   constructor(
     public menuService: TlcMenuService
   ) { }

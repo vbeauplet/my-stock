@@ -46,6 +46,7 @@
     </tl-icon-toggler>
     
     <div
+      *ngIf="this.showLabel"
       class="main-content-element menu-item-label"
       [class.tl-menu-content-element]="this.menuService.selectedMenuItem != menuItem"
       [class.tl-outline-content-element]="this.menuService.selectedMenuItem == menuItem">

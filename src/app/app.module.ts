@@ -20,6 +20,7 @@ import { TlInputComponent } from './components/tl-input/tl-input.component';
 import { TlSelectComponent } from './components/tl-select/tl-select.component';
 import { TlIconTogglerComponent } from './components/tl-icon-toggler/tl-icon-toggler.component';
 import { TlMobileMenuComponent } from './components/tl-mobile-menu/tl-mobile-menu.component';
+import { ShoppingViewComponent } from './views/shopping-view/shopping-view.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { TlMobileMenuComponent } from './components/tl-mobile-menu/tl-mobile-men
     TlInputComponent,
     TlSelectComponent,
     TlIconTogglerComponent,
-    TlMobileMenuComponent
+    TlMobileMenuComponent,
+    ShoppingViewComponent
   ],
   imports: [
     BrowserModule,

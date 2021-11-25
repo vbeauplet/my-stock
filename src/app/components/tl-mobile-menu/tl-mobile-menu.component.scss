@@ -7,7 +7,7 @@
   height:100%;
   min-height:100%;
   
-  color:white!important;
+  color:var(--menu-content-color)!important;
   
   display:flex;
   flex-direction:row-reverse;
@@ -23,7 +23,6 @@
   :host.shadowed{  
     background-color:var(--menu-bg-color);
     box-shadow: 0 0px 8px 0 var(--menu-bg-color);
-    color:white!important;
   }
 
 .menu-item-container{
@@ -102,11 +101,11 @@
     :host.shadowed{  
       background-color:var(--menu-bg-color);
       box-shadow: 0 0px 8px 0 var(--menu-bg-color);
-      color:white!important;
     }
   
   .menu-item-container{
     width:100%;
+    min-height:70px;
     
     padding-left:0px;
     padding-right:0px;
