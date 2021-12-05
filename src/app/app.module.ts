@@ -18,9 +18,12 @@ import { TlGaugeComponent } from './components/tl-gauge/tl-gauge.component';
 import { TlFormComponent } from './components/tl-form/tl-form.component';
 import { TlInputComponent } from './components/tl-input/tl-input.component';
 import { TlSelectComponent } from './components/tl-select/tl-select.component';
+import { TlShapeBlockComponent } from './components/tl-shape-block/tl-shape-block.component';
 import { TlIconTogglerComponent } from './components/tl-icon-toggler/tl-icon-toggler.component';
 import { TlMobileMenuComponent } from './components/tl-mobile-menu/tl-mobile-menu.component';
 import { ShoppingViewComponent } from './views/shopping-view/shopping-view.component';
+import { TlDatePickerComponent } from './components/tl-date-picker/tl-date-picker.component';
+import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import { ShoppingViewComponent } from './views/shopping-view/shopping-view.compo
     TlSelectComponent,
     TlIconTogglerComponent,
     TlMobileMenuComponent,
-    ShoppingViewComponent
+    ShoppingViewComponent,
+    TlDatePickerComponent,
+    TlShapeBlockComponent,
+    TlCalendarComponent
   ],
   imports: [
     BrowserModule,

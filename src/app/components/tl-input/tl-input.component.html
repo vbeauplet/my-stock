@@ -8,7 +8,8 @@
   [ngStyle]="{
       'height': this.height + 'px'
     }"
-  (keyup)="this.onPressKey($event)">
+  (keyup)="this.onPressKey($event)"
+  (focus)="this.focusInput.next()">
 
 <!-- Lingering placehoder, if any -->
 <div

@@ -52,6 +52,8 @@ export class Batch extends AbstractItem {
    */
   public expiryDate: string;
   
+  public date: Date = new Date();
+  
   constructor() {
     super()
   }

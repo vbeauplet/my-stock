@@ -19,6 +19,25 @@
     (changeValue)="onChangeValue(item.id, $event)"
     (changeValidationStatus)="onChangeStatus(item.id, $event)">
   </tl-input>
+  
+  <tl-date-picker
+    *ngIf="item.type == 'date-picker'"
+    class="item"
+    [class.filled]="this.getState(item.id).value != undefined && this.getState(item.id).value != ''"
+    [size]="'tl-full'"
+    [borderRadius]="this.itemsBorderRadius"
+    [tlStyle]="this.primaryStyle"
+    [calendarStyle]="'tl-sharp-transparent'"
+    [calendarButtonStyle]="this.primaryStyle"
+    [placeholder]="item.label"
+    [lingeringPlaceholder]="true"
+    [initialSelectedDate]="item.initialValue"
+    [validationOn]="this.activateItemValidation"
+    [validationFilters]="(this.activateItemValidation && item.validationFilter != undefined)?[item.validationFilter]:[]"
+    [validationMessage]="(this.activateItemValidation)?item.validationMessage:undefined"
+    (selectDate)="onChangeValue(item.id, $event)"
+    (changeValidationStatus)="onChangeStatus(item.id, $event)">
+  </tl-date-picker>
     
   <tl-toggler
     *ngIf="item.type == 'toggler'"

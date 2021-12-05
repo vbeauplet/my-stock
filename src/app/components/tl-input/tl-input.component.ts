@@ -70,9 +70,24 @@ export class TlInputComponent implements OnInit {
   @Input() placeholder: string  = '';
   
   /**
+   * Tells if component is synchrone, which means it reacts to any change on initial value
+   */
+  @Input() synchrone: boolean = false;
+  
+  /**
    * Initial value content of the input
    */
-  @Input() initialValue: string = undefined;
+   private _initialValue: string = undefined;
+  @Input() set initialValue(value: string) {
+     this._initialValue = value;
+     
+     // Only deal with initial value hange if component is synchrone
+     if(this.synchrone){
+       if(this._initialValue != undefined){
+         this.refreshFromInitialValue();
+       }
+     }
+  }
   
   /**
    * Tells if plachoder shall linger whenever user has written an input
@@ -114,6 +129,11 @@ export class TlInputComponent implements OnInit {
   @Output() changeValidationStatus: EventEmitter<number> = new EventEmitter<number>();
   
   /**
+   * Event which is emitted when the input gets in focus
+   */
+  @Output() focusInput: EventEmitter<any> = new EventEmitter<any>();
+  
+  /**
    * Curretn form value
    */
   public currentValue: string = '';
@@ -142,13 +162,20 @@ export class TlInputComponent implements OnInit {
     this.internalId = this.tlHelpersService.generateId();
     
     // Set initial value, if any
-    if(this.initialValue != undefined){
+    if(this._initialValue != undefined){
       setTimeout(() => {
-        document.getElementById(this.internalId).setAttribute('value', this.initialValue);
-        this.currentValue = this.initialValue;
-        this.check();
+        this.refreshFromInitialValue();
       }, 50);
     }
+  }
+  
+  /**
+   * Refreshes the component from the provided initial value
+   */
+  public refreshFromInitialValue(){
+    document.getElementById(this.internalId).setAttribute('value', this._initialValue);
+    this.currentValue = this._initialValue;
+    this.check();
   }
   
   /**

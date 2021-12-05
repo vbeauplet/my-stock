@@ -8,6 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShoppingViewComponent implements OnInit {
 
+  public event1 = {
+    date: new Date(),
+    event: 'Day4Life'
+  };
+  
+  public event2 = {
+    date: new Date(),
+    event: 'Montage'
+  };
+
   constructor() { }
 
   ngOnInit(): void {

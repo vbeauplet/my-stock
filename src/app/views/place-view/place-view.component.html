@@ -193,6 +193,14 @@
                 initialValue: this.editedBatch.favorite
 		          },
               {
+                id: 'batch-date',
+                type: 'date-picker',
+                label: 'Date Limite',
+                validationFilter: 'date',
+                validationMessage: 'Le contenu doit être une date valide',
+                initialValue: this.editedBatch.date
+              },
+              {
                 id: 'batch-quantity',
                 type: 'input-text',
                 label: 'Quantité',
