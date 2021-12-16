@@ -182,8 +182,8 @@
               {
                 id: 'batch-category',
                 type: 'select',
-                label: 'Cat�gorie',
-                proposals: [{ name: 'F�culent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}],
+                label: 'Catégorie',
+                proposals: [{ name: 'Féculent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}],
                 initialValue: this.editedBatch.category
               },
 		          {
@@ -199,6 +199,11 @@
                 validationFilter: 'date',
                 validationMessage: 'Le contenu doit être une date valide',
                 initialValue: this.editedBatch.date
+              },
+              {
+                id: 'batch-title',
+                type: 'title',
+                label: 'Some Title'
               },
               {
                 id: 'batch-quantity',
@@ -271,8 +276,6 @@
 		    }"
 		  [size]="'tl-half-responsive'"
 		  [itemsBorderRadius]="'tl-br-infinite'"
-		  [primaryStyle]="'tl-neumorphic-inset-sharp'"
-		  [secondaryStyle]="'tl-neumorphic'"
 		  [submitButtonLoadingStatus]="this.newBatchPopupLoadingStatus"
 		  (submitForm)="this.submitBatchForm($event)">
 		</tl-form>

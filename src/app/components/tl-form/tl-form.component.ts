@@ -63,14 +63,24 @@ export class TlFormComponent implements OnInit {
   @Input() buttonBorderRadius = 'tl-br-infinite';
   
   /**
-   * Primary Style of the form, in the ngx-tl-common size system
+   * Style of the form items, in the ngx-tl-common style system
    */
-  @Input() primaryStyle: string = 'tl-neumorphic';
+  @Input() itemStyle: string = 'tl-secondary-style';
   
   /**
-   * Secondary Style of the form, in the ngx-tl-common size system
+   * Secondary Style of the form, in the ngx-tl-common style system
    */
-  @Input() secondaryStyle: string = 'tl-neumorphic';
+  @Input() togglerButtonStyle: string = 'tl-soft-transparent';
+  
+  /**
+   * Style of the form popups (calendar, select list,...), in the ngx-tl-common style system
+   */
+  @Input() popupStyle: string = 'tl-glassmorphic';
+  
+  /**
+   * Style of the button within form popups, in the ngx-tl-common style system
+   */
+  @Input() popupButtonStyle: string = 'tl-glassmorphic';
 
   /**
    * Form definition
@@ -119,7 +129,7 @@ export class TlFormComponent implements OnInit {
       this.formState.push({
           id: item.id,
           optional: item.optional,
-          status: (item.type == 'toggler')?1:0,
+          status: (item.type == 'toggler' || item.type == 'title')?1:0,
           value: this.getInitialValue(item)
         });
     }
