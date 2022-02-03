@@ -39,8 +39,8 @@ export class PlaceStaticService {
       resolve(result);      
     });
   }
-  
-    
+
+
   /**
    * Add a place on server
    *

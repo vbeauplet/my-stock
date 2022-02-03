@@ -24,6 +24,7 @@ import { TlMobileMenuComponent } from './components/tl-mobile-menu/tl-mobile-men
 import { ShoppingViewComponent } from './views/shopping-view/shopping-view.component';
 import { TlDatePickerComponent } from './components/tl-date-picker/tl-date-picker.component';
 import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.component';
+import { ProfileViewComponent } from './views/profile-view/profile-view.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.compon
     ShoppingViewComponent,
     TlDatePickerComponent,
     TlShapeBlockComponent,
-    TlCalendarComponent
+    TlCalendarComponent,
+    ProfileViewComponent
   ],
   imports: [
     BrowserModule,

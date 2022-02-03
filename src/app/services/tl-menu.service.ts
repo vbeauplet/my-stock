@@ -56,7 +56,7 @@ export class TlcMenuService {
         }
       });
       
-      // Get initial routez
+      // Get initial route
       this.refreshFromRoute(router.url);
       
       // Fix issue with Angular native app router with a timeout, if needed

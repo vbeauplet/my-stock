@@ -37,11 +37,11 @@ export class AppComponent {
       route:'/shopping'
     },
     {
-      id: 'search',
-      label:'Recherche',
-      icon:'ion-search-outline',
-      iconOn:'ion-search',
-      route:'/search'
+      id: 'profile',
+      label:'Profil',
+      icon:'ion-person-circle-outline',
+      iconOn:'ion-person-circle',
+      route:'/profile'
     }
   ];
   

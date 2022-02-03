@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PlaceViewComponent } from './views/place-view/place-view.component';
+import { ProfileViewComponent } from './views/profile-view/profile-view.component';
 import { ShoppingViewComponent } from './views/shopping-view/shopping-view.component';
 import { StatsViewComponent } from './views/stats-view/stats-view.component';
 import { StockViewComponent } from './views/stock-view/stock-view.component';
@@ -10,6 +11,7 @@ const routes: Routes = [
     { path: 'stock/:id', component: PlaceViewComponent },
     { path: 'stats', component: StatsViewComponent },
     { path: 'shopping', component: ShoppingViewComponent },
+    { path: 'profile', component: ProfileViewComponent },
   
     // otherwise redirect to stock page
     { path: '**', redirectTo: 'stock' }
