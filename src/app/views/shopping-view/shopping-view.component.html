@@ -1,7 +1,32 @@
-<tl-date-picker
-  [size]="'tl-big'"
-  [tlStyle]="'tl-soft-transparent'"
-  [calendarStyle]="'tl-sharp-transparent'"
-  [calendarButtonStyle]="'tl-soft-transparent'"
-  [placeholder]="'Entre une date'">
-</tl-date-picker>
+<tl-loader
+  *ngIf="!this.isLoaded">
+</tl-loader>
+
+<ng-container
+  *ngIf="this.isLoaded">
+
+  <ng-container
+    *ngFor="let place of this.displayedStock">
+    
+    <!-- Title -->
+    <div
+      class="tl-big-margined tl-title">
+      {{ place.name }}
+    </div>
+    
+    <!-- Shopping batch panel -->
+    <div
+      class="tl-full tl-row-dir tl-hor-center tl-vert-center tl-flex-block">
+      
+      <ms-batch
+        class="tl-margined"
+        *ngFor="let batch of place.resolvedBatches"
+        [place]="place"
+        [batch]="batch"
+        [size]="'tl-big'">
+      </ms-batch>
+      
+    </div>
+  </ng-container>
+
+</ng-container>

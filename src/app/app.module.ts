@@ -25,6 +25,7 @@ import { ShoppingViewComponent } from './views/shopping-view/shopping-view.compo
 import { TlDatePickerComponent } from './components/tl-date-picker/tl-date-picker.component';
 import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.component';
 import { ProfileViewComponent } from './views/profile-view/profile-view.component';
+import { BatchComponent } from './components/batch/batch.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ProfileViewComponent } from './views/profile-view/profile-view.componen
     TlDatePickerComponent,
     TlShapeBlockComponent,
     TlCalendarComponent,
-    ProfileViewComponent
+    ProfileViewComponent,
+    BatchComponent
   ],
   imports: [
     BrowserModule,

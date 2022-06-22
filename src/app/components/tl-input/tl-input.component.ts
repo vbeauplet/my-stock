@@ -28,7 +28,7 @@ const NOSPACE_REGEXP: RegExp = new RegExp('^\\S*$');
 
 
 @Component({
-  selector: 'tl-input',
+  selector: 'tlc-input',
   host: { 
     '[class]' : 'this.size'
     },

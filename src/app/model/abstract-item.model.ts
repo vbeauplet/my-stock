@@ -18,12 +18,12 @@ export abstract class AbstractItem {
   /**
    * Object description
    */
-  public description: string;
+  public description: string = '';
   
   /**
    * Tells if this object has a favorite flag on
    */
-  public favorite: boolean;
+  public favorite: boolean = false;
   
   constructor() {
     // Nothing to do here

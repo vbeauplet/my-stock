@@ -8,6 +8,9 @@ import { PlaceStaticService } from './static/place.static.service';
 })
 export class StockService {
 
+  /**
+   * Contextual places
+   */
   public places: Place[] = [];
 
   /** 
@@ -44,7 +47,7 @@ export class StockService {
   }
   
   /**
-   * REloads stock service
+   * Reloads stock service
    */
   public reload(){
     this.reset();

@@ -1,6 +1,69 @@
-<tl-rater
-  [icon]="'ion-accessibility'"
-  [iconNumber]="10"
-  [iconHeight]="30"
-  (setRate)="onSetRate($event)">
-</tl-rater>
+<tl-card
+  class="tl-xbig-bottom-margined"
+  [tlStyle]="'tl-shadowed-soft-transparent'"
+  [size]="'tl-xbig'"
+  [title]="'Household Composition'"
+  [padding]="20">
+
+  <div
+    class="tl-margined tl-subtitle">
+    Adults
+  </div>
+
+  <tl-rater
+    *ngIf="this.householdService.isLoaded"
+    class="tl-margined"
+    [icon]="'ion-accessibility'"
+    [iconNumber]="5"
+    [iconHeight]="50"
+    [rate]="this.householdService.household.numberOfAdults"
+    (setRate)="onSetNumberOfAdults($event)">
+  </tl-rater>
+  
+  <div
+    class="tl-margined tl-subtitle">
+    Children
+  </div>
+
+  <tl-rater
+    *ngIf="this.householdService.isLoaded"
+    class="tl-margined"
+    [icon]="'ion-accessibility'"
+    [iconNumber]="10"
+    [iconHeight]="30"
+    [rate]="this.householdService.household.numberOfChildren"
+    (setRate)="onSetNumberOfChildren($event)">
+  </tl-rater>
+  
+  <tl-card
+    *ngIf="this.householdService.isLoaded"
+    style="margin-top:30px;text-align:center"
+    [tlStyle]="'tl-no-bg-outlined'"
+    [size]="'tl-near-full-responsive'"
+    [padding]="20">
+    
+    Your household uses around {{ this.householdService.household.computedNumberOfCalories }}kCal a day to live<br><br>
+    That is the equivalent of {{ this.householdService.household.computedNumberOfCalories/8000 }}L of oil a day, or {{ this.householdService.household.computedNumberOfCalories/8000*15 }}km travelled in a mid-size car
+    
+  </tl-card>
+  
+</tl-card>
+
+ <tl-card
+  class="tl-big-bottom-margined"
+  [tlStyle]="'tl-shadowed-soft-transparent'"
+  [size]="'tl-xbig'"
+  [title]="'Your categories'"
+  [padding]="20">
+
+  <tl-chips-input
+    *ngIf="this.householdService.isLoaded"
+    [size]="'tl-near-full'"
+    [borderRadius]="'tl-br-big'"
+    [tlStyle]="'tl-soft-transparent'"
+    [chipsStyle]="'tl-sharp-transparent'"
+    [initialChips]="this.householdService.household.categories"
+    (change)="this.onChangeCategories($event)">
+  </tl-chips-input>
+  
+</tl-card>

@@ -1,0 +1,76 @@
+<div
+  class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-no-wrap tl-flex-block">
+    
+  <div
+    class="tl-subtitle tl-flex-grow tl-ellipsis"
+    style="margin-right:10px">
+    {{ batch.name }}
+  </div>
+  
+  <div
+    class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
+  
+    <tl-icon-toggler
+      class="tl-margined" 
+      [size]="30"
+      [icon]="'ion-heart-outline'"
+      [iconOn]="'ion-heart'"
+      [initialState]="batch.favorite"
+      (toggle)="this.onChangeFavoriteFlag($event)">
+    </tl-icon-toggler>
+    
+    <tl-square-icon
+      *ngIf="this.displayEditButton"
+      style="cursor:pointer"
+      class="tl-margined"
+      [size]="30"
+      [icon]="'ion-create-outline'"
+      (click)="this.clickEditButton.next(batch)">
+    </tl-square-icon>
+    
+    <tl-square-icon
+      style="cursor:pointer"
+      class="tl-margined"
+      [size]="30"
+      [icon]="'ion-trash-outline'">
+    </tl-square-icon>
+    
+  </div>
+  
+</div>
+
+<div
+  class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
+ 
+  <tl-gauge
+    class="tl-flex-grow"
+    [tlStyle]="'tl-soft-transparent'"
+    [size]="'tl-fit-content'"
+    [min]="0"
+    [low]="batch.lowLimitQuantity"
+    [high]="batch.goodQuantity"
+    [max]="batch.highestQuantity"
+    [current]="batch.quantity">
+  </tl-gauge>
+
+  <div
+    style="margin-left:10px"
+    class="tl-row-dir tl-vert-center tl-flex-block">
+    
+    <tl-button
+      [tlStyle]="'tl-dome'"
+      [size]="30"
+      [icon]="'ion-remove-outline'"
+      (clickButton)="onClickBatchRemove()">
+    </tl-button>
+    
+    <tl-button
+      [tlStyle]="'tl-dome'"
+      [size]="30"
+      [icon]="'ion-add-outline'"
+      (clickButton)="onClickBatchAdd()">
+    </tl-button>
+    
+  </div>
+  
+</div>

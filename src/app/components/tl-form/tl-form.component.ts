@@ -38,7 +38,7 @@ export interface ITlFormItemState {
  * @author vbeauplet
  */
 @Component({
-  selector: 'tl-form',
+  selector: 'tlc-form',
   host: { 
     '[class]' : 'this.size + " tl-col-dir tl-hor-center tl-flex-block"'
     },

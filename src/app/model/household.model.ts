@@ -1,3 +1,4 @@
+import { ITlSelectProposal } from "ngx-tl-common";
 import { AbstractItem, abstractItemConverter } from "./abstract-item.model";
 
 /**
@@ -17,10 +18,44 @@ export class Household extends AbstractItem {
    */
   public numberOfChildren: number = 0;
   
+  /**
+   * Household categories
+   */
+  public categories: string[] = [];
   
+
+  // Derived attributes
+  
+  /**
+   * Derived attributes representing the energy consumption (food) of the family, in kCal
+   */
+  public computedNumberOfCalories: number = 0;
+  
+  /**
+   * Derived attributes representing the ecategory as 'TlSelect' proposals
+   */
+  public computedCategoryProposals: ITlSelectProposal[] = [];
+   
+   
   constructor() {
     super()
   }
+  
+  /**
+   * Refreshes the derived attributes of the Household objecct
+   */
+  public refreshDerivedAttributes(){
+    
+    // ComputedNumberOfCalories
+    this.computedNumberOfCalories = 2500 * this.numberOfAdults + 1500 * this.numberOfChildren;
+    
+    // Category proposals
+    this.computedCategoryProposals = [];
+    for(let category of this.categories){
+      this.computedCategoryProposals.push({name: category});
+    }
+  }
+  
 }
 
 /**
@@ -33,6 +68,9 @@ export const householdConverter = {
       abstractItemConverter.setFromServer(data, household);
       household.numberOfAdults = data.numberOfAdults;
       household.numberOfChildren = data.numberOfChildren;
+      household.categories = data.categories;
+      household.refreshDerivedAttributes();
+      
       return household;
     },
   toServer: function(household: Household): any{
@@ -43,7 +81,8 @@ export const householdConverter = {
           description: household.description,
           favorite: household.favorite,
           numberOfAdults: household.numberOfAdults,
-          numberOfChildren: household.numberOfChildren
+          numberOfChildren: household.numberOfChildren,
+          categoris: household.categories
         };
     }
 }

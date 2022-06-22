@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { ITlFormItemState } from 'src/app/components/tl-form/tl-form.component';
 import { Batch } from 'src/app/model/batch.model';
 import { Place } from 'src/app/model/place.model';
+import { HouseholdService } from 'src/app/services/household.service';
 import { BatchStaticService } from 'src/app/services/static/batch.static.service';
-import { PlaceStaticService } from 'src/app/services/static/place.static.service';
 import { StockService } from 'src/app/services/stock.service';
 
 @Component({
@@ -46,6 +46,11 @@ export class PlaceViewComponent implements OnInit {
    * Tells if the popup to create new batch shall be displayed
    */
   public displayNewBatchPopup: boolean = false;
+  
+  /**
+   * Tells if view in currently in creation or edition submission mode
+   */
+  public isSubmittingEditionOrCreationForm: boolean = false;
 
   /**
    * Status of the label of the "new batch" button
@@ -69,9 +74,9 @@ export class PlaceViewComponent implements OnInit {
       private route: ActivatedRoute,
       private tlHelpersService: TlHelpersService,
       private tlAlertService: TlAlertService,
-      private placeStaticService: PlaceStaticService,
       private batchStaticService: BatchStaticService,
-      public stockService: StockService
+      public stockService: StockService,
+      public householdService: HouseholdService
     ) { }
 
   ngOnInit(): void {
@@ -109,31 +114,6 @@ export class PlaceViewComponent implements OnInit {
     }, 4000);
   }
   
-  /**
-   * Handles click on "add" over a batch
-   */
-  public onClickBatchAdd(batch: Batch){
-	  this.batchStaticService.incrementBatchOnServer(this.place.id, batch);
-    batch.quantity++;
-    this.placeStaticService.computeWeather(this.place);
-  }
-  
-  /**
-   * Handles click on "remove" over a batch
-   */
-  public onClickBatchRemove(batch: Batch){
-    this.batchStaticService.decrementBatchOnServer(this.place.id, batch);
-    batch.quantity--;
-    this.placeStaticService.computeWeather(this.place);
-  }
-  
-  /**
-   * Handles change on the favorite flag of a batch
-   */
-  public onChangeFavoriteFlag(batch: Batch, newValue: boolean){
-    this.batchStaticService.setBatchFavoriteFlagOnServer(this.place.id, batch, newValue);
-    batch.favorite = newValue;
-  }
 
   /**
    * Handles click on "show more" button
@@ -177,16 +157,28 @@ export class PlaceViewComponent implements OnInit {
   public submitBatchForm(formStates: ITlFormItemState[]){
 
     this.newBatchPopupLoadingStatus = 0;
+    this.isSubmittingEditionOrCreationForm = true;
 
-    // If this is a creation, generate ID
-    if(this.editedBatch.isUndefined()){
-      this.editedBatch.id = this.tlHelpersService.generateId();
+    // Initialize result batch
+    let batch: Batch;
+    let isCreation = this.editedBatch.isUndefined();
+
+    // If this is a creation, create a new batch and generate ID
+    if(isCreation){
+      batch = new Batch();
+      
+      // Initialize ID
+      batch.id = this.tlHelpersService.generateId();
+    }
+    // if this is an edition, retrieve edited batch and update
+    else{
+      batch = this.editedBatch
     }
 
     // Create or update Batch from form content
-    let batch: Batch = this.editedBatch
     batch.name = this.getState('batch-name', formStates).value;
     batch.favorite = this.getState('batch-favorite', formStates).value;
+    batch.expiryDate = this.getState('batch-date', formStates).value;
     batch.category = this.getState('batch-category', formStates).value;
     batch.quantity = this.getState('batch-quantity', formStates).value;
     batch.lowLimitQuantity = this.getState('batch-low-quantity', formStates).value;
@@ -196,7 +188,7 @@ export class PlaceViewComponent implements OnInit {
     batch.energy = this.getState('batch-energy', formStates).value;
     batch.price = this.getState('batch-price', formStates).value;
     
-    // Add new batch on server
+    // Add or update batch on server
     this.batchStaticService.setBatchOnServer(this.place.id, batch).then(() => {
     	this.stockService.reload();
       this.newBatchPopupLoadingStatus = 1;
@@ -204,7 +196,13 @@ export class PlaceViewComponent implements OnInit {
           this.displayNewBatchPopup = false;
           this.newBatchPopupLoadingStatus = -1;
           setTimeout(() => {
-            this.tlAlertService.raiseInfo('Nouveau lot "'+ batch.name + '" ajouté dans la pièce');
+            if(isCreation){
+              this.tlAlertService.raiseInfo('Nouveau lot "'+ batch.name + '" ajouté dans la pièce');
+            }
+            else{
+              this.tlAlertService.raiseInfo('Le lot "'+ batch.name + '" a bien été modifié');
+            }
+            this.isSubmittingEditionOrCreationForm = false;
           }, 500)
       }, 700);
     })

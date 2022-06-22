@@ -41,87 +41,15 @@
     Aucun lot trouvé
   </div>
   
-  <div
+  <ms-batch
     *ngFor="let batch of this.displayedBatches"
-    class="batch-card tl-margined tl-big tl-soft-transparent tl-container-flex-block tl-big-padded">
-   
-    <div
-      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-no-wrap tl-flex-block">
-        
-      <div
-        class="tl-subtitle tl-flex-grow tl-ellipsis"
-        style="margin-right:10px">
-        {{ batch.name }}
-      </div>
-      
-      <div
-        class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
-      
-        <tl-icon-toggler
-          class="tl-margined" 
-          [size]="30"
-          [icon]="'ion-heart-outline'"
-          [iconOn]="'ion-heart'"
-          [initialState]="batch.favorite"
-          (toggle)="this.onChangeFavoriteFlag(batch, $event)">
-        </tl-icon-toggler>
-        
-        <tl-square-icon
-          style="cursor:pointer"
-          class="tl-margined"
-          [size]="30"
-          [icon]="'ion-create-outline'"
-          (click)="this.onClickBatchEdit(batch)">
-        </tl-square-icon>
-        
-        <tl-square-icon
-          style="cursor:pointer"
-          class="tl-margined"
-          [size]="30"
-          [icon]="'ion-trash-outline'">
-        </tl-square-icon>
-        
-      </div>
-      
-    </div>
-    
-    <div
-      class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-flex-block">
-     
-	    <tl-gauge
-	      class="tl-flex-grow"
-	      [tlStyle]="'tl-soft-transparent'"
-	      [size]="'tl-fit-content'"
-	      [min]="0"
-	      [low]="batch.lowLimitQuantity"
-	      [high]="batch.goodQuantity"
-	      [max]="batch.highestQuantity"
-	      [current]="batch.quantity">
-	    </tl-gauge>
-    
-	    <div
-	      style="margin-left:10px"
-	      class="tl-row-dir tl-vert-center tl-flex-block">
-	      
-	      <tl-button
-	        [tlStyle]="'tl-dome'"
-	        [size]="30"
-	        [icon]="'ion-remove-outline'"
-	        (clickButton)="onClickBatchRemove(batch)">
-	      </tl-button>
-	      
-	      <tl-button
-	        [tlStyle]="'tl-dome'"
-          [size]="30"
-	        [icon]="'ion-add-outline'"
-	        (clickButton)="onClickBatchAdd(batch)">
-	      </tl-button>
-	      
-	    </div>
-	    
-	  </div>
-    
-  </div>
+    class="tl-margined"
+    [place]="this.place"
+    [batch]="batch"
+    [size]="'tl-big'"
+    [displayEditButton]="true"
+    (clickEditButton)="onClickBatchEdit(batch)">    
+  </ms-batch>
   
 </div>
 
@@ -164,12 +92,12 @@
   <!-- Popup to display -->
   <tl-card
     style="overflow:visible"
-    [tlStyle]="'tl-outlined'"
+    [tlStyle]="'tl-bodylike'"
     [size]="'tl-two-third-responsive'"
     [padding]="20">
     
     <tl-form
-      *ngIf="this.displayNewBatchPopup"
+      *ngIf="this.displayNewBatchPopup || this.isSubmittingEditionOrCreationForm"
 		  [form]="{
 		      items: [
 		          {
@@ -183,7 +111,7 @@
                 id: 'batch-category',
                 type: 'select',
                 label: 'Catégorie',
-                proposals: [{ name: 'Féculent' },{name: 'Huile'},{name: 'Sucre'},{name: 'Gateaux'},{name: 'Alcool'},{name: 'Noix'},{name: 'Conserve'},{name: 'Epices'}],
+                proposals: this.householdService.household.computedCategoryProposals,
                 initialValue: this.editedBatch.category
               },
 		          {
@@ -275,6 +203,8 @@
 		      }
 		    }"
 		  [size]="'tl-half-responsive'"
+      [validationInlineStyle]="true"
+      [itemStyle]="'tl-soft-transparent'"
 		  [itemsBorderRadius]="'tl-br-infinite'"
 		  [submitButtonLoadingStatus]="this.newBatchPopupLoadingStatus"
 		  (submitForm)="this.submitBatchForm($event)">

@@ -5,24 +5,6 @@
 <tl-indicator
   *ngIf="this.areStatsComputed"
   class="tl-xbig-margined"
-  [icon]="'ion-flame-outline'"
-  [iconSize]="100"
-  [text]="this.totalEnergy + ' kCal'"
-  [textPosition]="'bottom'">
-</tl-indicator>
-
-<tl-indicator
-  *ngIf="this.areStatsComputed"
-  class="tl-xbig-margined"
-  [icon]="'ion-cash-outline'"
-  [iconSize]="100"
-  [text]="this.totalPrice + ' €'"
-  [textPosition]="'bottom'">
-</tl-indicator>
-
-<tl-indicator
-  *ngIf="this.areStatsComputed"
-  class="tl-xbig-margined"
   [icon]="'ion-pulse-outline'"
   [iconSize]="100"
   [text]="this.autonomy + ' jours d\'autonomie'"
@@ -30,70 +12,68 @@
   [color]="'tl-outline'">
 </tl-indicator>
 
-
-
-<!--  <tl-form
-  [form]="{
-      items: [
-          {
-            id: 'field1',
-            type: 'input-text',
-            label: 'label 1',
-            icon: 'ion-calendar-outline',
-            validationFilter: 'number',
-            validationMessage: 'Le contenu doit être une date valide écrite au format JJ/MM/AAAA. Ex: 09/11/2021'
-          },
-          {
-            id: 'field1.1',
-            type: 'toggler',
-            label: 'Label toggler',
-            ratio: 0.7
-          },
-          {
-            id: 'field1.2',
-            type: 'toggler',
-            label: 'Display toggler',
-            ratio: 0.7
-          },
-          {
-            id: 'field2',
-            type: 'input-text',
-            label: 'label 2'
-          },
-          {
-            id: 'field3',
-            type: 'select',
-            label: 'label 3',
-            proposals: [{ name: 'Proposal 1' },{name: 'Proposal 2'},{name: 'Proposal 3'}]
-          }
-        ],
-      button: {
-        label: 'Send',
-        icon: 'ion-send-outline'
-      }
-    }"
-  [size]="'tl-half-responsive'"
-  [itemsBorderRadius]="'tl-br-infinite'"
-  [primaryStyle]="'tl-soft-transparent'"
-  [secondaryStyle]="'tl-sharp-transparent'">
-</tl-form>
-
+<div
+  class="tl-near-full-responsive tl-row-dir tl-vert-center tl-hor-center tl-flex-block">
+  
+  <tl-indicator
+    *ngIf="this.areStatsComputed"
+    class="tl-xbig-margined"
+    [icon]="'ion-flame-outline'"
+    [iconSize]="100"
+    [text]="this.totalEnergy + ' kCal'"
+    [textPosition]="'bottom'">
+  </tl-indicator>
+  
+  <div
+    class="tl-xbig tl-row-dir tl-hor-center tl-vert-center tl-flex-block"
+    style="height:500px;">
+  
+    <tl-loader
+      *ngIf="!this.isEnergyChartReady">
+    </tl-loader>
+  
+    <google-chart
+      *ngIf="this.isEnergyChartReady"
+      style="width:100%;height:100%"
+      [type]="this.chartType"
+      [data]="this.energyChartData"
+      [columns]="this.energyChartColumnNames"
+      [options]="this.chartOptions">
+    </google-chart>
+  
+  </div>
+  
+</div>
 
 <div
-  class="tl-near-full-responsive tl-row-dir tl-hor-center tl-vert-center tl-flex-block"
-  style="height:700px;">
+  class="tl-near-full-responsive tl-row-dir tl-vert-center tl-hor-center tl-flex-block">
 
-  <tl-loader
-    *ngIf="!this.isChartReady">
-  </tl-loader>
-
-  <google-chart
-    *ngIf="this.isChartReady"
-    style="width:100%;height:100%"
-    [type]="this.chartType"
-    [data]="this.chartData"
-    [columns]="this.chartColumnNames"
-    [options]="this.chartOptions">
-  </google-chart>
-
-</div> -->
+  <tl-indicator
+    *ngIf="this.areStatsComputed"
+    class="tl-xbig-margined"
+    [icon]="'ion-cash-outline'"
+    [iconSize]="100"
+    [text]="this.totalPrice + ' €'"
+    [textPosition]="'bottom'">
+  </tl-indicator>
+  
+  <div
+    class="tl-xbig tl-row-dir tl-hor-center tl-vert-center tl-flex-block"
+    style="height:500px;">
+  
+    <tl-loader
+      *ngIf="!this.isPriceChartReady">
+    </tl-loader>
+  
+    <google-chart
+      *ngIf="this.isPriceChartReady"
+      style="width:100%;height:100%"
+      [type]="this.chartType"
+      [data]="this.priceChartData"
+      [columns]="this.priceChartColumnNames"
+      [options]="this.chartOptions">
+    </google-chart>
+  
+  </div>
+  
+</div>

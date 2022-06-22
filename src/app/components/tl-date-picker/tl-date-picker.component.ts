@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'tl-date-picker',
+  selector: 'tlc-date-picker',
   host: { 
       '[class]' : 'this.size + " tl-col-dir tl-flex-block"'
     },

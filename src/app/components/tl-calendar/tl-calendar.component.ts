@@ -6,7 +6,7 @@ export interface ITlCalendarEvent {
 }
 
 @Component({
-  selector: 'tl-calendar',
+  selector: 'tlc-calendar',
   host: { 
       '[class]' : 'this.size + " tl-col-dir tl-flex-block"'
     },

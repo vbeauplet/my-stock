@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'tl-icon-toggler',
+  selector: 'tlc-icon-toggler',
   templateUrl: './tl-icon-toggler.component.html',
   styleUrls: ['./tl-icon-toggler.component.css']
 })

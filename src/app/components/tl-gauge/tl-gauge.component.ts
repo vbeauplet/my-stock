@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'tl-gauge',
+  selector: 'tlc-gauge',
   host: { 
       '[class]' : 'this.size + " tl-col-dir tl-hor-center tl-vert-up tl-no-wrap tl-flex-block"'
   },

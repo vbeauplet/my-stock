@@ -89,6 +89,7 @@ export class TlcMenuService {
    * Initialize services with inut menu items
    */
   public init(menuItems: ITlMenuItem[]){
+    console.log(menuItems);
     this.menuItems = menuItems;
     this.isInitialized = true;
   }
