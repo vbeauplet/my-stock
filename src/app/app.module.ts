@@ -26,6 +26,7 @@ import { TlDatePickerComponent } from './components/tl-date-picker/tl-date-picke
 import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.component';
 import { ProfileViewComponent } from './views/profile-view/profile-view.component';
 import { BatchComponent } from './components/batch/batch.component';
+import { TlLongClickDirective } from './directives/tl-long-click.directive';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { BatchComponent } from './components/batch/batch.component';
     TlShapeBlockComponent,
     TlCalendarComponent,
     ProfileViewComponent,
-    BatchComponent
+    BatchComponent,
+    TlLongClickDirective
   ],
   imports: [
     BrowserModule,

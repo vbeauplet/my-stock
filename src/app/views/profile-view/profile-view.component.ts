@@ -40,7 +40,7 @@ export class ProfileViewComponent implements OnInit {
   /**
    * Handles change on category list
    */
-  public onChangeCategories(rawValue: string[]){
+  public onChangeCategories(rawValue: string[]){    
     this.householdService.household.categories = rawValue;
     this.householdService.household.refreshDerivedAttributes();
     this.householdService.householdSubject.next();

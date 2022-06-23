@@ -1,22 +1,22 @@
-.new-batch-button {
-	position:fixed;
-	bottom:100px;
-	right:20px;
+.floating-action-center{
+  position:fixed;
+  bottom:100px;
+  right:20px;
 }
 
-.new-batch-button-label{
-	position:relative;
-	left:0px;
+.floating-action-center-button-label{
+  position:relative;
+  left:0px;
   opacity:1;
-	transition: left ease-in 300ms,
-	 opacity ease-out 300ms;
+  transition: left ease-in 300ms,
+  opacity ease-out 300ms;
 }
 
-	.new-batch-button-label.hidden{
-	  opacity:0;
-	  left:100px;
-	}
-	
-	.new-batch-button-label.none{
+  .floating-action-center-button-label.hidden{
+    opacity:0;
+    left:100px;
+  }
+  
+  .floating-action-center-button-label.none{
     display:none;
   }

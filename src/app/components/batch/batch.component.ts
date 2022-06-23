@@ -1,13 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Batch } from 'src/app/model/batch.model';
 import { Place } from 'src/app/model/place.model';
+import { HouseholdService } from 'src/app/services/household.service';
 import { BatchStaticService } from 'src/app/services/static/batch.static.service';
 import { PlaceStaticService } from 'src/app/services/static/place.static.service';
 
 @Component({
   selector: 'ms-batch',
   host: { 
-    '[class]' : 'this.size + " tl-shadowed-soft-transparent tl-big-padded tl-container-flex-block"'
+    '[class]' : 'this.size + " tl-shadowed-soft-transparent tl-big-padded tl-container-flex-block"',
+    '[class.selected]' : 'this.isSelected'
     },
   templateUrl: './batch.component.html',
   styleUrls: ['./batch.component.css']
@@ -37,17 +39,63 @@ export class BatchComponent implements OnInit {
   @Input() displayEditButton: boolean = false;
   
   /**
+   * Enables the selection mode
+   */
+  @Input() enableSelectionMode: boolean = false;
+  
+  /**
+   * Tells if the batch is in selection mode
+   */
+  @Input() isInSelectionMode: boolean = false;
+  
+  /**
    * Event which is emitted if the "Edit" button is clicked
    */
   @Output() clickEditButton: EventEmitter<Batch> = new EventEmitter<Batch>();
-
+  
+  /**
+   * Event which is emitted when current batch is being selected. 
+   * Only available if the enableSelectionMode flag is set tot tru
+   */
+  @Output() select: EventEmitter<Batch> = new EventEmitter<Batch>(); 
+  
+    /**
+   * Event which is emitted when current batch is being unselected. 
+   * Only available if the enableSelectionMode flag is set tot tru
+   */
+  @Output() unselect: EventEmitter<Batch> = new EventEmitter<Batch>(); 
+  
+  /**
+   * Tells if current batch is selected
+   */
+  public isSelected: boolean = false;
+  
+  
   constructor(
       private placeStaticService: PlaceStaticService,
-      private batchStaticService: BatchStaticService) { }
+      private batchStaticService: BatchStaticService,
+      public householdService: HouseholdService) { }
 
   ngOnInit(): void {
   }
   
+  
+  /**
+   * Select the batch
+   */
+  public selectBatch(){
+    this.isInSelectionMode = true;
+    this.isSelected = true;
+    this.select.next(this.batch);
+  }
+  
+  /**
+   * Select the batch
+   */
+  public unselectBatch(){
+    this.isSelected = false;
+    this.unselect.next(this.batch);
+  }
   
   /**
    * Handles click on "add" over a batch
@@ -74,5 +122,16 @@ export class BatchComponent implements OnInit {
     this.batchStaticService.setBatchFavoriteFlagOnServer(this.place.id, this.batch, newValue);
     this.batch.favorite = newValue;
   }
+  
+  /**
+   * Handles long click on batch
+   */
+  public onLongClick(){
+    if(this.enableSelectionMode){
+      this.selectBatch()
+    }
+  }
+  
+  
 
 }

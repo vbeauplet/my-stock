@@ -31,6 +31,11 @@ export class PlaceViewComponent implements OnInit {
    * List of displayed batches
    */
   public displayedBatches: Batch[] = [];
+  
+  /**
+   * List of all selected batches for batch action
+   */
+  public selectedBatches: Batch[] = [];
 
   /**
    * Max number of batch to display on view 
@@ -41,11 +46,6 @@ export class PlaceViewComponent implements OnInit {
    * Tells if the "load more" button shall be visible
    */
   public showLoadMoreButton = false;
-  
-  /**
-   * Tells if the popup to create new batch shall be displayed
-   */
-  public displayNewBatchPopup: boolean = false;
   
   /**
    * Tells if view in currently in creation or edition submission mode
@@ -64,6 +64,23 @@ export class PlaceViewComponent implements OnInit {
    * Loading status of the new batch popup submit button
    */
   public newBatchPopupLoadingStatus: number = -1;
+  
+    /**
+   * Tells if the popup to create new batch shall be displayed
+   */
+  public displayNewBatchPopup: boolean = false;
+ 
+ 
+  /**
+   * Loading status of the 'change category' popup submit button
+   */
+  public changeCategoryPopupLoadingStatus: number = -1;
+  
+    /**
+   * Tells if the popup to change batch category shall be displayed
+   */
+  public displayChangeCategoryPopup: boolean = false;
+  
   
   /**
    * Batch being edited
@@ -128,6 +145,23 @@ export class PlaceViewComponent implements OnInit {
   }
   
   /**
+   * Handles batch selection
+   */
+  public onSelectBatch(batch: Batch){
+    this.selectedBatches.push(batch);
+  }
+  
+  /**
+   * Handles batch un-selection
+   */
+  public onUnselectBatch(batch: Batch){
+    const index = this.selectedBatches.indexOf(batch, 0);
+    if (index > -1) {
+       this.selectedBatches.splice(index, 1);
+    }
+  }
+  
+  /**
    * Handles click on the edition button over a batch
    */
   public onClickBatchEdit(batch: Batch){
@@ -142,7 +176,7 @@ export class PlaceViewComponent implements OnInit {
   /**
    * Handles click on the close button when editing a batch
    */
-  public onClickClosePopup(){
+  public onClickCloseNewBatchPopup(){
     
     // Set edited batch
     this.editedBatch = new Batch();
@@ -206,6 +240,35 @@ export class PlaceViewComponent implements OnInit {
           }, 500)
       }, 700);
     })
+  }
+  
+    /**
+   * Submit batchly change batch catergories
+   */
+  public submitChangeCategoryForm(formStates: ITlFormItemState[]){
+
+    this.changeCategoryPopupLoadingStatus = 0;
+
+    // Retrieve form content
+    let newCategory = this.getState('batches-category', formStates).value;
+    
+    // For each selected batches, update on server
+    let changeCategoryPromises: Promise<void>[] = [];
+    for(let batch of this.selectedBatches){
+      changeCategoryPromises.push(this.batchStaticService.setBatchCategoryOnServer(this.place.id, batch, newCategory));
+    }
+    Promise.all(changeCategoryPromises)
+      .then(() => {
+          this.changeCategoryPopupLoadingStatus = 1;
+          setTimeout(() => {
+              this.changeCategoryPopupLoadingStatus = -1;
+              setTimeout(() => {
+                this.tlAlertService.raiseInfo('La catégorie des lots séléctionnées a bien été mise à jour');
+                this.stockService.reload();
+              }, 500)
+          }, 1000);
+        });
+    
   }
 
   /**

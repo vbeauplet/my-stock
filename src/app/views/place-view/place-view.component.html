@@ -11,6 +11,7 @@
 	  {{ this.place.name }}
 	</div>
 
+
 	<!-- Place Search Bar -->
 	<tl-input
 	  class="tl-big-bottom-margined"
@@ -22,7 +23,7 @@
 	  [height]="50"
 	  [validationOn]="false"
 	  (changeValue)="this.searchBatch($event)">
-	</tl-input>
+	</tl-input>  
 	
 </tl-card>
 
@@ -48,7 +49,11 @@
     [batch]="batch"
     [size]="'tl-big'"
     [displayEditButton]="true"
-    (clickEditButton)="onClickBatchEdit(batch)">    
+    [enableSelectionMode]="true"
+    [isInSelectionMode]="this.selectedBatches.length != 0"
+    (clickEditButton)="onClickBatchEdit(batch)"
+    (select)="this.onSelectBatch(batch)"
+    (unselect)="this.onUnselectBatch(batch)">
   </ms-batch>
   
 </div>
@@ -60,34 +65,80 @@
   Voir plus
 </a>
 
-<!-- Button to add a new batch -->
+<!-- Floating action center (bottom right corner) -->
 <div
-  *ngIf="!this.place.isUndefined()"
-  class="new-batch-button tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
-  
+  *ngIf="this.stockService.isLoaded"
+  class="floating-action-center tl-col-dir tl-hor-right tl-flex-block">
+
+  <!-- Button in case multiple batches are selected -->  
   <div
-    style="margin-right:10px"
-    class="new-batch-button-label"
-    [class.hidden]="this.newBatchButtonLabelStatus === 1"
-    [class.none]="this.newBatchButtonLabelStatus === 2">
-    Ajouter un lot
+    *ngIf="this.selectedBatches.length!=0"
+    class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
+    
+    <div
+      style="margin-right:10px"
+      class="floating-action-center-button-label">
+      Changer la catégorie
+    </div>
+    
+    <tl-button
+      [tlStyle]="'tl-glassmorphic'"
+      [size]="60"
+      [icon]="'ion-pricetags-outline'"
+      [color]="'tl-success'"
+      (clickButton)="this.displayChangeCategoryPopup = true">
+    </tl-button>
+    
+  </div>
+  <div
+    *ngIf="this.selectedBatches.length!=0"
+    class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
+    
+    <div
+      style="margin-right:10px"
+      class="floating-action-center-button-label">
+      Changer de pièce
+    </div>
+    
+    <tl-button
+      [tlStyle]="'tl-glassmorphic'"
+      [size]="60"
+      [icon]="'ion-location-outline'"
+      [color]="'tl-success'"
+      (clickButton)="this.displayNewBatchPopup = true">
+    </tl-button>
+    
+  </div>
+
+  <!-- Button to add a new batch -->
+  <div
+    class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
+    
+    <div
+      style="margin-right:10px"
+      class="floating-action-center-button-label"
+      [class.hidden]="this.newBatchButtonLabelStatus === 1"
+      [class.none]="this.newBatchButtonLabelStatus === 2">
+      Ajouter un lot
+    </div>
+    
+  	<tl-button
+  	  [tlStyle]="'tl-glassmorphic'"
+  	  [size]="60"
+  	  [icon]="'ion-add-outline'"
+  	  [color]="'tl-success'"
+  	  (clickButton)="this.displayNewBatchPopup = true">
+  	</tl-button>
+  	
   </div>
   
-	<tl-button
-	  [tlStyle]="'tl-glassmorphic'"
-	  [size]="60"
-	  [icon]="'ion-add-outline'"
-	  [color]="'tl-success'"
-	  (clickButton)="this.displayNewBatchPopup = true">
-	</tl-button>
-	
 </div>
 
 <!-- Popup to create new batch -->
 <tl-popup-overlay
   [display]="this.displayNewBatchPopup"
   [tlStyle]="'tl-sharp-transparent'"
-  (close)="this.onClickClosePopup()">
+  (close)="this.onClickCloseNewBatchPopup()">
   
   <!-- Popup to display -->
   <tl-card
@@ -209,6 +260,48 @@
 		  [submitButtonLoadingStatus]="this.newBatchPopupLoadingStatus"
 		  (submitForm)="this.submitBatchForm($event)">
 		</tl-form>
+    
+  </tl-card>
+
+</tl-popup-overlay>
+
+
+<!-- Popup to change category (batch mode) -->
+<tl-popup-overlay
+  [display]="this.displayChangeCategoryPopup"
+  [tlStyle]="'tl-sharp-transparent'"
+  (close)="this.displayChangeCategoryPopup = false">
+  
+  <!-- Popup to display -->
+  <tl-card
+    style="overflow:visible"
+    [tlStyle]="'tl-bodylike'"
+    [size]="'tl-two-third-responsive'"
+    [padding]="20">
+    
+    <tl-form
+      *ngIf="this.displayChangeCategoryPopup"
+      [form]="{
+          items: [
+              {
+                id: 'batches-category',
+                type: 'select',
+                label: 'Nouvelle Catégorie',
+                proposals: this.householdService.household.computedCategoryProposals
+              }
+            ],
+          button: {
+            label: 'Modifier',
+            icon: 'ion-send-outline'
+          }
+        }"
+      [size]="'tl-half-responsive'"
+      [itemStyle]="'tl-soft-transparent'"
+      [itemsBorderRadius]="'tl-br-infinite'"
+      [validationInlineStyle]="true"
+      [submitButtonLoadingStatus]="this.changeCategoryPopupLoadingStatus"
+      (submitForm)="this.submitChangeCategoryForm($event)">
+    </tl-form>
     
   </tl-card>
 

@@ -51,6 +51,7 @@ export class Household extends AbstractItem {
     
     // Category proposals
     this.computedCategoryProposals = [];
+    console.log(this.categories);
     for(let category of this.categories){
       this.computedCategoryProposals.push({name: category});
     }

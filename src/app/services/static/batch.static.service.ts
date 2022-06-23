@@ -80,6 +80,22 @@ export class BatchStaticService {
   }
   
   /**
+   * Set category of a batch on server
+   *
+   * Returns the request promise so that we now when ok
+   */
+  public setBatchCategoryOnServer(placeId: String, batch: Batch, category: string): Promise<void>{
+    return new Promise<void>(async (resolve) => {
+      const db = getFirestore(this.appService.firebaseApp);
+      const batchRef = doc(db, '/places/' + placeId + '/batches', batch.id);
+      await updateDoc(batchRef, {category: category}).then(() => {
+            resolve();
+          });
+              
+    });
+  }
+  
+  /**
    * Increment a batch quantity on server
    *
    * Returns the request promise so that we now when ok

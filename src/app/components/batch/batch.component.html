@@ -1,5 +1,6 @@
-<div
-  class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-no-wrap tl-flex-block">
+<div longPress
+  class="tl-full tl-row-dir tl-vert-center tl-hor-space-between tl-no-wrap tl-flex-block"
+  (longClick)="this.onLongClick()">
     
   <div
     class="tl-subtitle tl-flex-grow tl-ellipsis"
@@ -10,30 +11,70 @@
   <div
     class="tl-row-dir tl-vert-center tl-no-wrap tl-flex-block">
   
-    <tl-icon-toggler
-      class="tl-margined" 
-      [size]="30"
-      [icon]="'ion-heart-outline'"
-      [iconOn]="'ion-heart'"
-      [initialState]="batch.favorite"
-      (toggle)="this.onChangeFavoriteFlag($event)">
-    </tl-icon-toggler>
+    <ng-container
+      *ngIf="!this.isInSelectionMode">
+      
+      <ng-container
+        *ngIf="this.householdService.isLoaded && !this.householdService.household.categories.includes(this.batch.category)">
+        
+        <tl-square-icon
+          style="margin-right:0px;"
+          class="tl-margined"
+          [size]="30"
+          [icon]="'ion-alert-circle-outline'"
+          [color]="'tl-neutral'">
+        </tl-square-icon>
+        
+        <div
+          class="tl-small-content tl-neutral-content-element"
+          title="La catégorie pour ce lot n'est pas cohérente avec les catégories du foyer">
+          Catégorie&nbsp;invalide
+        </div>
+        
+      </ng-container>
+      
+      <tl-icon-toggler
+        class="tl-margined" 
+        [size]="30"
+        [icon]="'ion-heart-outline'"
+        [iconOn]="'ion-heart'"
+        [initialState]="batch.favorite"
+        (toggle)="this.onChangeFavoriteFlag($event)">
+      </tl-icon-toggler>
+      
+      <tl-square-icon
+        *ngIf="this.displayEditButton"
+        style="cursor:pointer"
+        class="tl-margined"
+        [size]="30"
+        [icon]="'ion-create-outline'"
+        (click)="this.clickEditButton.next(batch)">
+      </tl-square-icon>
+      
+      <tl-square-icon
+        style="cursor:pointer"
+        class="tl-margined"
+        [size]="30"
+        [icon]="'ion-trash-outline'">
+      </tl-square-icon>
+      
+    </ng-container>
     
-    <tl-square-icon
-      *ngIf="this.displayEditButton"
-      style="cursor:pointer"
-      class="tl-margined"
-      [size]="30"
-      [icon]="'ion-create-outline'"
-      (click)="this.clickEditButton.next(batch)">
-    </tl-square-icon>
-    
-    <tl-square-icon
-      style="cursor:pointer"
-      class="tl-margined"
-      [size]="30"
-      [icon]="'ion-trash-outline'">
-    </tl-square-icon>
+    <ng-container
+      *ngIf="this.isInSelectionMode">
+      
+      <tl-icon-toggler
+        class="tl-margined" 
+        [size]="30"
+        [icon]="'ion-ellipse-outline'"
+        [iconOn]="'ion-checkmark-circle'"
+        [initialState]="this.isSelected"
+        [synchrone]="true"
+        (toggleOn)="this.selectBatch()"
+        (toggleOff)="this.unselectBatch()">
+      </tl-icon-toggler>
+      
+    </ng-container>
     
   </div>
   

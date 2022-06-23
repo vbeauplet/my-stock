@@ -1,3 +1,11 @@
+:host{
+  transition: background-color 300ms ease-in-out;
+}
+
+:host.selected{
+  background-color:var(--sharp-transparent-bg-color)!important;
+}
+
 .new-batch-button {
   position:fixed;
   bottom:100px;
