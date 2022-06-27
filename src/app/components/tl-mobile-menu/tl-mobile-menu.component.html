@@ -35,7 +35,7 @@
     class="menu-item tl-col-dir tl-hor-center tl-flex-block"
     (click)="this.menuService.selectMenuItem(menuItem)">
     
-    <tl-icon-toggler
+    <tlc-icon-toggler
       [initialState]="this.menuService.selectedMenuItem == menuItem"
       [icon]="menuItem.icon"
       [iconOn]="(menuItem.iconOn != undefined)?menuItem.iconOn:menuItem.icon"
@@ -43,7 +43,7 @@
       [size]="this.iconSize"
       [synchrone]="true"
       [unclickable]="true">
-    </tl-icon-toggler>
+    </tlc-icon-toggler>
     
     <div
       *ngIf="this.showLabel"

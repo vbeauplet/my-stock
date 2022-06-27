@@ -38,7 +38,7 @@ export class TlMobileMenuComponent implements OnInit {
   
   constructor(
     public menuService: TlcMenuService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TlAlertService, TlHelpersService } from 'ngx-tl-common';
+import { TlAlertService, TlHelpersService, TlThemeService } from 'ngx-tl-common';
 import { Subscription } from 'rxjs';
 import { ITlFormItemState } from 'src/app/components/tl-form/tl-form.component';
 import { Batch } from 'src/app/model/batch.model';
@@ -91,6 +91,7 @@ export class PlaceViewComponent implements OnInit {
       private route: ActivatedRoute,
       private tlHelpersService: TlHelpersService,
       private tlAlertService: TlAlertService,
+      private tlThemeService: TlThemeService,
       private batchStaticService: BatchStaticService,
       public stockService: StockService,
       public householdService: HouseholdService
@@ -149,6 +150,12 @@ export class PlaceViewComponent implements OnInit {
    */
   public onSelectBatch(batch: Batch){
     this.selectedBatches.push(batch);
+    
+    // Handle layout to improve visibility
+    if(document.documentElement.clientWidth < 800){
+      document.getElementById('my-stock-menu').style.setProperty('padding-top', '260px');
+      document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.sharpTransparentBgColor); 
+    }
   }
   
   /**
@@ -158,6 +165,12 @@ export class PlaceViewComponent implements OnInit {
     const index = this.selectedBatches.indexOf(batch, 0);
     if (index > -1) {
        this.selectedBatches.splice(index, 1);
+    }
+    
+    // Handle layout to improve visibility
+    if(this.selectedBatches.length == 0 && document.documentElement.clientWidth < 800){
+      document.getElementById('my-stock-menu').style.setProperty('padding-top', '50px');
+      document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.menuBgColor); 
     }
   }
   

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ITlTheme, TlThemeService } from 'ngx-tl-common';
+import { ITlTheme, TlMenuService, TlThemeService } from 'ngx-tl-common';
 import { initializeApp } from "firebase/app";
 import { AppService } from './services/app.service';
-import { TlcMenuService } from './services/tl-menu.service';
 import { ITlMenuItem } from './services/tl-menu-item.interface';
+import { TlcMenuService } from './services/tl-menu.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,8 @@ export class AppComponent {
       label:'Stock',
       icon:'ion-speedometer-outline',
       iconOn:'ion-speedometer',
-      route:'/stock'
+      route:'/stock',
+      routeFilter:'/stock**'
     },
     {
       id: 'stats',

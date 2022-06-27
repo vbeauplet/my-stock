@@ -79,7 +79,6 @@ export class BatchComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  
   /**
    * Select the batch
    */
@@ -123,11 +122,26 @@ export class BatchComponent implements OnInit {
     this.batch.favorite = newValue;
   }
   
+    
+  /**
+   * Selects or unselect a batch, depending on its current selection status
+   */
+  public onClickBatch(){
+    if(this.isInSelectionMode){
+      if(this.isSelected){
+        this.unselectBatch();
+      }
+      else{
+        this.selectBatch();
+      }
+    }
+  }
+  
   /**
    * Handles long click on batch
    */
-  public onLongClick(){
-    if(this.enableSelectionMode){
+  public onLongClickBatch(){
+    if(this.enableSelectionMode && !this.isInSelectionMode){
       this.selectBatch()
     }
   }
