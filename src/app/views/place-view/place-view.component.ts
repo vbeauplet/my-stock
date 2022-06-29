@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TlAlertService, TlHelpersService, TlThemeService } from 'ngx-tl-common';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,16 @@ import { StockService } from 'src/app/services/stock.service';
   styleUrls: ['./place-view.component.css']
 })
 export class PlaceViewComponent implements OnInit {
+
+  @HostListener('window:resize', ['$event'])
+  public onResize(event) {
+    if(this.selectedBatches.length != 0 && document.documentElement.clientWidth < 800){
+      this.highlightSelectionMenu();
+    }
+    else{
+      this.unhighlightSelectionMenu();
+    }
+  }
 
   /**
    * Subscription to route to retrieve the ID
@@ -76,10 +86,15 @@ export class PlaceViewComponent implements OnInit {
    */
   public changeCategoryPopupLoadingStatus: number = -1;
   
-    /**
+  /**
    * Tells if the popup to change batch category shall be displayed
    */
   public displayChangeCategoryPopup: boolean = false;
+  
+  /**
+   * Tells if selection menu is highligted 
+   */
+  public isSelectionMenuHighlighted: boolean = false;
   
   
   /**
@@ -132,6 +147,10 @@ export class PlaceViewComponent implements OnInit {
     }, 4000);
   }
   
+  ngOnDestroy(): void {
+    this.unhighlightSelectionMenu();
+  }
+  
 
   /**
    * Handles click on "show more" button
@@ -153,8 +172,7 @@ export class PlaceViewComponent implements OnInit {
     
     // Handle layout to improve visibility
     if(document.documentElement.clientWidth < 800){
-      document.getElementById('my-stock-menu').style.setProperty('padding-top', '260px');
-      document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.sharpTransparentBgColor); 
+      this.highlightSelectionMenu();
     }
   }
   
@@ -169,8 +187,7 @@ export class PlaceViewComponent implements OnInit {
     
     // Handle layout to improve visibility
     if(this.selectedBatches.length == 0 && document.documentElement.clientWidth < 800){
-      document.getElementById('my-stock-menu').style.setProperty('padding-top', '50px');
-      document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.menuBgColor); 
+      this.unhighlightSelectionMenu();
     }
   }
   
@@ -300,6 +317,26 @@ export class PlaceViewComponent implements OnInit {
     }
     this.showLoadMoreButton = false;
     this.displayedBatches = temp;
+  }
+  
+  /**
+   * Hilight the selection menu
+   */
+  private highlightSelectionMenu(){
+    document.getElementById('my-stock-menu').style.setProperty('padding-top', '260px');
+    document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.sharpTransparentBgColor);
+    this.isSelectionMenuHighlighted = true;
+  }
+  
+  /**
+   * Un-highlight the selection menu
+   */
+  private unhighlightSelectionMenu(){
+    if(this.isSelectionMenuHighlighted){
+      document.getElementById('my-stock-menu').style.setProperty('padding-top', '50px');
+      document.documentElement.style.setProperty('--menu-bg-color', this.tlThemeService.currentTheme.menuBgColor);
+      this.isSelectionMenuHighlighted = false;
+    }
   }
 
   /**
