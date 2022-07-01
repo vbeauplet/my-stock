@@ -1,4 +1,11 @@
+<!-- Display loader if household is not loaded yet -->
+<tl-loader
+  *ngIf="!this.householdService.isLoaded">
+</tl-loader>
+
+<!-- Household card -->
 <tl-card
+  *ngIf="this.householdService.isLoaded"
   class="tl-xbig-bottom-margined"
   [tlStyle]="'tl-shadowed-soft-transparent'"
   [size]="'tl-xbig'"
@@ -50,6 +57,7 @@
 </tl-card>
 
  <tl-card
+  *ngIf="this.householdService.isLoaded"
   class="tl-big-bottom-margined"
   [tlStyle]="'tl-shadowed-soft-transparent'"
   [size]="'tl-xbig'"
@@ -67,3 +75,14 @@
   </tl-chips-input>
   
 </tl-card>
+
+<tl-text-stateful-button
+  *ngIf="this.householdService.isLoaded"
+  style="margin-bottom:30px;"
+  [size]="60"
+  [icon]="'ion-log-out-outline'"
+  [text]="'Log out'"
+  [color]="'tl-outline'"
+  (click)="this.logout()">
+</tl-text-stateful-button>
+  

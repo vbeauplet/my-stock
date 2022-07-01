@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Household } from '../model/household.model';
+import { LoginService } from './login.service';
 import { HouseholdStaticService } from './static/household.static.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HouseholdService {
-
 
   /**
    * Contextual household
@@ -20,42 +20,43 @@ export class HouseholdService {
   public isLoaded: boolean = false;
   
   /**
-   * Subject which is emitted whenever household changes
+   * Subject which is emitted whenever household changes (or at subscirption time because it is a behavior subject)
    */
-  public householdSubject: Subject<void> = new Subject<void>();
+  public householdSubject: BehaviorSubject<Household> = new BehaviorSubject<Household>(new  Household());
   
   constructor(
-      private householdStaticService: HouseholdStaticService
+      private householdStaticService: HouseholdStaticService,
+      private loginService: LoginService
     ) {
     
-    // Load places
-    this.load();
+    // Subscribe to the stock code behavior subject so that household is loaded from it consistently
+    this.loginService.currentCodeSubject.subscribe(
+      (stockCode: string) => {
+          this.load(stockCode);
+        });
+    
   }
-  
-  /**
-   * Reloads stock service
-   */
-  public reload(){
-    this.reset();
-    this.load();
-  }
-  
+
   /**
    * Reset stock service
    */
   public reset(){
+    this.household = new Household();
     this.isLoaded = false;
   }
   
   /**
-   * Load stock
+   * Loads a stock household from stock code
    */
-  public load(){
-     this.householdStaticService.getHouseholdOnServer('toto')
-      .then((response: Household) => {
-          this.household = response;
-          this.isLoaded = true;
-          this.householdSubject.next();
-        });
+  public load(stockCode: string){
+    this.reset();
+    if(stockCode != undefined && stockCode != null && stockCode != ''){
+      this.householdStaticService.getHouseholdOnServer(stockCode)
+        .then((response: Household) => {
+            this.household = response;
+            this.householdSubject.next(this.household);
+            this.isLoaded = true;
+          });
+    }
   }
 }

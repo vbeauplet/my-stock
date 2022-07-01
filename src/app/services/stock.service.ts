@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Household } from '../model/household.model';
 import { Place } from '../model/place.model';
+import { HouseholdService } from './household.service';
 import { PlaceStaticService } from './static/place.static.service';
 
 @Injectable({
@@ -12,6 +14,11 @@ export class StockService {
    * Contextual places
    */
   public places: Place[] = [];
+  
+  /**
+   * Current place references
+   */
+  public currentHousehold : Household = new Household();
 
   /** 
    * Tells if all stock places has been fetched
@@ -39,19 +46,28 @@ export class StockService {
   public stockResetSubject: Subject<void> = new Subject<void>();
 
   constructor(
-      private placeStaticService: PlaceStaticService
+      private placeStaticService: PlaceStaticService,
+      private householdService: HouseholdService
     ) {
     
-    // Load places
-    this.load();
+    // Load places occresponding to current household
+    // For this, subscribe the the Household behavior subject so that it keeps consistency when household is modified or reset
+    this.householdService.householdSubject.subscribe(
+      (household: Household) => {
+        this.currentHousehold = household;
+        this.reload();
+      });
+    
   }
   
   /**
-   * Reloads stock service
+   * Reloads stock service from place references
    */
   public reload(){
     this.reset();
-    this.load();
+    if(this.currentHousehold.isDefined()){
+      this.load();
+    }
   }
   
   /**
@@ -65,10 +81,10 @@ export class StockService {
   }
   
   /**
-   * Load stock
+   * Load stock from place references
    */
   public load(){
-     this.placeStaticService.getPlacesOnServer('toto')
+     this.placeStaticService.getPlacesOnServer(this.currentHousehold.places)
       .then((response: Place[]) => {
           this.places = response;
           this.isLoaded = true;

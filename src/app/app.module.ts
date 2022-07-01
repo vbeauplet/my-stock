@@ -12,6 +12,8 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { StockViewComponent } from './views/stock-view/stock-view.component';
 import { StatsViewComponent } from './views/stats-view/stats-view.component';
 import { PlaceViewComponent } from './views/place-view/place-view.component';
+import { LoginViewComponent } from './views/login-view/login-view.component';
+import { RegisterViewComponent } from './views/register-view/register-view.component';
 
 // Components
 import { TlGaugeComponent } from './components/tl-gauge/tl-gauge.component';
@@ -27,6 +29,7 @@ import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.compon
 import { ProfileViewComponent } from './views/profile-view/profile-view.component';
 import { BatchComponent } from './components/batch/batch.component';
 import { TlLongClickDirective } from './directives/tl-long-click.directive';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +49,9 @@ import { TlLongClickDirective } from './directives/tl-long-click.directive';
     TlCalendarComponent,
     ProfileViewComponent,
     BatchComponent,
-    TlLongClickDirective
+    TlLongClickDirective,
+    LoginViewComponent,
+    RegisterViewComponent
   ],
   imports: [
     BrowserModule,

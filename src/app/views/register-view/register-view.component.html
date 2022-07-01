@@ -1,0 +1,42 @@
+<tl-overlay
+  [tlStyle]="'tl-bodylike'">
+
+  <tl-form
+    [form]="{
+        items: [
+            {
+              id: 'stock-code',
+              type: 'input-text',
+              label: 'Nouveau Stock Code',
+              icon: 'ion-key-outline',
+              validationFilter: '^[a-zA-Z0-9\*\!\\?\(\)]{8,20}$',
+              validationMessage: '8 chars min, 20 chars max, no spaces !'
+            }
+          ],
+        button: {
+          label: 'Créer',
+          icon: 'ion-arrow-forward-outline',
+          size: 'tl-big'
+        }
+      }"
+    [size]="'tl-big'"
+    [itemStyle]="'tl-shadowed-soft-transparent'"
+    [itemsBorderRadius]="'tl-br-small'"
+    [buttonBorderRadius]="'tl-br-small'"
+    [validationInlineStyle]="true"
+    [submitButtonLoadingStatus]="this.registerButtonLoadingStatus"
+    (submitForm)="this.register($event)">
+  </tl-form>
+  
+  <p
+    class="tl-regular-content tl-xbig-top-margined">
+    Vous avez déjà un stock ? <a routerLink="/login">Connectez-vous ici !</a>
+  </p>
+  
+  <p
+    *ngIf="this.registerError != null"
+    class="tl-failure-content-element tl-big-top-margined">
+    {{ this.registerError }}
+  </p>
+  
+</tl-overlay>

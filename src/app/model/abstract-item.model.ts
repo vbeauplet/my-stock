@@ -13,7 +13,7 @@ export abstract class AbstractItem {
   /**
    * Object name
    */
-  public name: string;
+  public name: string = '';
 
   /**
    * Object description

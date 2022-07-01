@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { TlAlertService, TlHelpersService } from 'ngx-tl-common';
 import { ITlFormItemState } from 'src/app/components/tl-form/tl-form.component';
 import { Place } from 'src/app/model/place.model';
+import { HouseholdService } from 'src/app/services/household.service';
+import { HouseholdStaticService } from 'src/app/services/static/household.static.service';
 import { PlaceStaticService } from 'src/app/services/static/place.static.service';
 import { StockService } from 'src/app/services/stock.service';
 
@@ -38,8 +40,10 @@ export class StockViewComponent implements OnInit {
     private router: Router,
     private tlHelpersService: TlHelpersService,
     private tlAlertService: TlAlertService,
+    private householdStaticService: HouseholdStaticService,
     private placeStaticService: PlaceStaticService,
-    public stockService: StockService
+    public stockService: StockService,
+    public householdService: HouseholdService
   ) { }
 
   ngOnInit(): void {
@@ -77,15 +81,22 @@ export class StockViewComponent implements OnInit {
     
     // Add new batch on server
     this.placeStaticService.addPlaceOnServer(newPlace).then(() => {
-      this.stockService.reload();
-      this.newPlacePopupLoadingStatus = 1;
-      setTimeout(() => {
-          this.displayNewPlacePopup = false;
-          this.newPlacePopupLoadingStatus = -1;
-          setTimeout(() => {
-            this.tlAlertService.raiseInfo('La nouveau pièce "'+ newPlace.name + '" a bien été ajoutée');
-          }, 500)
-      }, 700);
+      
+      // Add place to household
+      this.householdStaticService.addPlaceReferenceOnServer(this.householdService.household, newPlace.id).then(() => {
+        
+        // Reload household and stock
+        this.householdService.load(this.householdService.household.code);
+        this.newPlacePopupLoadingStatus = 1;
+        setTimeout(() => {
+            this.displayNewPlacePopup = false;
+            this.newPlacePopupLoadingStatus = -1;
+            setTimeout(() => {
+              this.tlAlertService.raiseInfo('La nouveau pièce "'+ newPlace.name + '" a bien été ajoutée');
+            }, 500)
+        }, 700);
+      });
+      
     })
   }
   

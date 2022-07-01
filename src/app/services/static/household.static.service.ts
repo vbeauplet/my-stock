@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Household, householdConverter } from 'src/app/model/household.model';
 import { AppService } from '../app.service';
 
-import { getFirestore, collection, query, getDocs, setDoc, doc,updateDoc, increment } from "firebase/firestore";
+import { getFirestore, collection, query, getDocs, setDoc, doc,updateDoc, increment, getDoc, arrayUnion } from "firebase/firestore";
 
 @Injectable({
   providedIn: 'root'
@@ -13,23 +13,41 @@ export class HouseholdStaticService {
       private appService: AppService
     ) {}
   
-    /**
-   * Gets the household corresponding to a user on server
+   /**
+   * Adds an household on server
+   *
+   * Returns the request promise so that we know when over
+   */
+  public setHouseholdOnServer(household: Household): Promise<void>{
+    return new Promise<void>(async (resolve) => {
+      
+      const db = getFirestore(this.appService.firebaseApp);
+      const batchRef = doc(db, '/households', household.code);
+      await setDoc(batchRef, householdConverter.toServer(household)).then(() => {
+            resolve();
+          });
+              
+    });
+  }
+  
+  /**
+   * Gets the household corresponding to a stock code
    *
    * Returns the request promise so that resulting data can be handled asynchronously
    */
-  public getHouseholdOnServer(userId: String): Promise<Household>{
-    return new Promise<Household>(async (resolve) => {
+  public getHouseholdOnServer(code: string): Promise<Household>{
+    return new Promise<Household>(async (resolve, reject) => {
       
-
       const db = getFirestore(this.appService.firebaseApp);
-      const q = query(collection(db, '/households'));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        
-        let household: Household = householdConverter.fromServer(doc.data());
+      const docRef = doc(db, "households", code);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        let household: Household = householdConverter.fromServer(docSnap.data());
         resolve(household);
-      }); 
+      } else {
+        reject('Stock does not exist');
+      }
     });
   }
   
@@ -67,7 +85,7 @@ export class HouseholdStaticService {
     });
   }
   
-    /**
+  /**
    * Updates the categories corresponding to the household on server
    *
    * Returns the request promise so that we now when ok
@@ -78,6 +96,23 @@ export class HouseholdStaticService {
       const db = getFirestore(this.appService.firebaseApp);
       const batchRef = doc(db, '/households/' + household.id);
       await updateDoc(batchRef, {categories: categories}).then(() => {
+            resolve();
+          });
+              
+    });
+  }
+  
+  /**
+   * Adds a place reference to the household on server
+   *
+   * Returns the request promise so that we now when ok
+   */
+  public addPlaceReferenceOnServer(household: Household, newPlaceReference: string): Promise<void>{
+    return new Promise<void>(async (resolve) => {
+      
+      const db = getFirestore(this.appService.firebaseApp);
+      const householdRef = doc(db, '/households/' + household.id);
+      await updateDoc(householdRef, {places: arrayUnion(newPlaceReference)}).then(() => {
             resolve();
           });
               

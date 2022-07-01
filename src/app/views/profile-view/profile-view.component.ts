@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HouseholdService } from 'src/app/services/household.service';
+import { LoginService } from 'src/app/services/login.service';
 import { HouseholdStaticService } from 'src/app/services/static/household.static.service';
 
 @Component({
@@ -11,7 +13,9 @@ import { HouseholdStaticService } from 'src/app/services/static/household.static
 export class ProfileViewComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private householdStaticService: HouseholdStaticService,
+    private loginService: LoginService,
     public householdService: HouseholdService) { }
 
   ngOnInit(): void {
@@ -23,7 +27,6 @@ export class ProfileViewComponent implements OnInit {
   public onSetNumberOfAdults(rawValue: number){
     this.householdService.household.numberOfAdults = rawValue;
     this.householdService.household.refreshDerivedAttributes();
-    this.householdService.householdSubject.next();
     this.householdStaticService.updateNumberOfAdultsOnServer(this.householdService.household, rawValue);
   }
   
@@ -33,7 +36,6 @@ export class ProfileViewComponent implements OnInit {
   public onSetNumberOfChildren(rawValue: number){
     this.householdService.household.numberOfChildren = rawValue;
     this.householdService.household.refreshDerivedAttributes();
-    this.householdService.householdSubject.next();
     this.householdStaticService.updateNumberOfChildrenOnServer(this.householdService.household, rawValue);
   }
 
@@ -43,7 +45,14 @@ export class ProfileViewComponent implements OnInit {
   public onChangeCategories(rawValue: string[]){    
     this.householdService.household.categories = rawValue;
     this.householdService.household.refreshDerivedAttributes();
-    this.householdService.householdSubject.next();
     this.householdStaticService.updateCategoriesOnServer(this.householdService.household, rawValue);
+  }
+  
+  /**
+   * Logs out of the application
+   */
+  public logout(){
+    this.loginService.logout();
+    this.router.navigate(['/login']);
   }
 }

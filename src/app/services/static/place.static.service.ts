@@ -3,7 +3,7 @@ import { Batch } from 'src/app/model/batch.model';
 import { Place, placeConverter } from 'src/app/model/place.model';
 import { BatchStaticService } from './batch.static.service';
 
-import { getFirestore, collection, query, getDocs, setDoc, doc,updateDoc, increment } from "firebase/firestore";
+import { getFirestore, collection, query, getDocs, setDoc, doc,updateDoc, increment, getDoc } from "firebase/firestore";
 import { AppService } from '../app.service';
 
 @Injectable({
@@ -18,25 +18,26 @@ export class PlaceStaticService {
   
   
   /**
-   * Gets all places correpsonding to a user on server
+   * Gets places corresponding to a set of references on server
    *
    * Returns the request promise so that resulting data can be handled asynchronously
    */
-  public getPlacesOnServer(userId: String): Promise<Place[]>{
+  public getPlacesOnServer(placeRefs: string[]): Promise<Place[]>{
     return new Promise<Place[]>(async (resolve) => {
       
       let result: Place[] = [];
 
-      const db = getFirestore(this.appService.firebaseApp);
-      const q = query(collection(db, '/places'));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        
-        let place: Place = placeConverter.fromServer(doc.data());
-        result.push(place);
-      });
+      for(let placeRef of placeRefs){
+        const db = getFirestore(this.appService.firebaseApp);
+        const docRef = doc(db, "places", placeRef);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          let place: Place = placeConverter.fromServer(docSnap.data());
+          result.push(place);
+        }
+      }
       
-      resolve(result);      
+      resolve(result);
     });
   }
 

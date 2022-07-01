@@ -9,6 +9,11 @@ import { AbstractItem, abstractItemConverter } from "./abstract-item.model";
 export class Household extends AbstractItem {
   
   /**
+   * Stock Code
+   */
+  public code: string = null;
+  
+  /**
    * Household number of adults
    */
   public numberOfAdults: number = 1;
@@ -21,7 +26,12 @@ export class Household extends AbstractItem {
   /**
    * Household categories
    */
-  public categories: string[] = [];
+  public categories: string[] = ['Féculent', 'Noix', 'Huile', 'Friandise', 'Alcool', 'Conserve'];
+  
+  /**
+   * Places carried by the stock household
+   */
+  public places: string[] = [];
   
 
   // Derived attributes
@@ -39,6 +49,13 @@ export class Household extends AbstractItem {
    
   constructor() {
     super()
+  }
+  
+  /**
+   * Tells if this is an actual household
+   */
+  public isDefined(){
+    return this.code != null;
   }
   
   /**
@@ -66,9 +83,11 @@ export const householdConverter = {
     
       let household = new Household();
       abstractItemConverter.setFromServer(data, household);
+      household.code = data.code;
       household.numberOfAdults = data.numberOfAdults;
       household.numberOfChildren = data.numberOfChildren;
       household.categories = data.categories;
+      household.places = data.places;
       household.refreshDerivedAttributes();
       
       return household;
@@ -80,9 +99,11 @@ export const householdConverter = {
           name: household.name,
           description: household.description,
           favorite: household.favorite,
+          code: household.code,
           numberOfAdults: household.numberOfAdults,
           numberOfChildren: household.numberOfChildren,
-          categoris: household.categories
+          categories: household.categories,
+          places: household.places
         };
     }
 }

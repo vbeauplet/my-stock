@@ -1,0 +1,42 @@
+<tl-overlay
+  [tlStyle]="'tl-bodylike'">
+
+  <tl-form
+    [form]="{
+        items: [
+            {
+              id: 'stock-code',
+              type: 'input-text',
+              label: 'Stock Code',
+              icon: 'ion-key-outline'
+            }
+          ],
+        button: {
+          label: 'Go',
+          icon: 'ion-arrow-forward-outline',
+          size: 'tl-big'
+        }
+      }"
+    [size]="'tl-big'"
+    [itemStyle]="'tl-shadowed-soft-transparent'"
+    [itemsBorderRadius]="'tl-br-small'"
+    [buttonBorderRadius]="'tl-br-small'"
+    [activateItemValidation]="false"
+    [submitButtonLoadingStatus]="this.loginButtonLoadingStatus"
+    (submitForm)="this.login($event)">
+  </tl-form>
+  
+  <p
+    class="tl-regular-content tl-xbig-top-margined">
+    Vous n'avez pas encore de stock ? <a routerLink="/register">Créez-en un !</a>
+  </p>
+  
+  
+  <p
+    *ngIf="this.loginError != null"
+    class="tl-failure-content-element tl-big-top-margined">
+    {{ this.loginError }}
+  </p>
+  
+  
+</tl-overlay>
