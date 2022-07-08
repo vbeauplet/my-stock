@@ -9,12 +9,12 @@
   class="tl-xbig-bottom-margined"
   [tlStyle]="'tl-shadowed-soft-transparent'"
   [size]="'tl-xbig'"
-  [title]="'Household Composition'"
+  [title]="'Mon foyer'"
   [padding]="20">
 
   <div
     class="tl-margined tl-subtitle">
-    Adults
+    Nombre d'adultes
   </div>
 
   <tl-rater
@@ -29,7 +29,7 @@
   
   <div
     class="tl-margined tl-subtitle">
-    Children
+    Nombre d'enfants
   </div>
 
   <tl-rater
@@ -49,9 +49,7 @@
     [size]="'tl-near-full-responsive'"
     [padding]="20">
     
-    Your household uses around {{ this.householdService.household.computedNumberOfCalories }}kCal a day to live<br><br>
-    That is the equivalent of {{ this.householdService.household.computedNumberOfCalories/8000 }}L of oil a day, or {{ this.householdService.household.computedNumberOfCalories/8000*15 }}km travelled in a mid-size car
-    
+    Votre foyer consomme environ {{ this.householdService.household.computedNumberOfCalories }}kCal par jour pour vivre
   </tl-card>
   
 </tl-card>
@@ -61,7 +59,7 @@
   class="tl-big-bottom-margined"
   [tlStyle]="'tl-shadowed-soft-transparent'"
   [size]="'tl-xbig'"
-  [title]="'Your categories'"
+  [title]="'Mes catégories'"
   [padding]="20">
 
   <tl-chips-input
@@ -71,6 +69,7 @@
     [tlStyle]="'tl-soft-transparent'"
     [chipsStyle]="'tl-sharp-transparent'"
     [initialChips]="this.householdService.household.categories"
+    [inputPlaceholder]="'Ajouter une catégorie'"
     (change)="this.onChangeCategories($event)">
   </tl-chips-input>
   

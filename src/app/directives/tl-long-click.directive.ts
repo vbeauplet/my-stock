@@ -38,7 +38,7 @@ export class TlLongClickDirective {
     );
     this.keepClickSubscribe = merge(mousedown, mouseup, touchstart, touchEnd)
       .pipe(
-        switchMap((state) => (state ? timer(this.threshold, 100) : of(null))),
+        switchMap((state) => (state ? timer(this.threshold, 200) : of(null))),
         filter((value) => value)
       )
       .subscribe(() => {

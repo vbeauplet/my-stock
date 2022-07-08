@@ -29,6 +29,7 @@ import { TlCalendarComponent } from './components/tl-calendar/tl-calendar.compon
 import { ProfileViewComponent } from './views/profile-view/profile-view.component';
 import { BatchComponent } from './components/batch/batch.component';
 import { TlLongClickDirective } from './directives/tl-long-click.directive';
+import { TlLogoMenuComponent } from './components/tl-logo-menu/tl-logo-menu.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { TlLongClickDirective } from './directives/tl-long-click.directive';
     BatchComponent,
     TlLongClickDirective,
     LoginViewComponent,
-    RegisterViewComponent
+    RegisterViewComponent,
+    TlLogoMenuComponent
   ],
   imports: [
     BrowserModule,

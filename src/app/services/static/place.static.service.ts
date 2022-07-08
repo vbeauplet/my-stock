@@ -78,6 +78,23 @@ export class PlaceStaticService {
     });
   }
   
+    
+  /**
+   * Set favorite flag of a Place on server
+   *
+   * Returns the request promise so that we now when ok
+   */
+  public setPlaceFavoriteFlagOnServer(place: Place, favorite: boolean): Promise<void>{
+    return new Promise<void>(async (resolve) => {
+      const db = getFirestore(this.appService.firebaseApp);
+      const placeRef = doc(db, '/places', place.id);
+      await updateDoc(placeRef, {favorite: favorite}).then(() => {
+            resolve();
+          });
+              
+    });
+  }
+  
   /**
    * Compoute weather derived property
    */

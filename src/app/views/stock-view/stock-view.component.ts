@@ -64,6 +64,14 @@ export class StockViewComponent implements OnInit {
     this.router.navigate(['/stock/' + place.id]);
   }
   
+  /**
+   * Handles change on the favorite flag of a batch
+   */
+  public onChangeFavoriteFlag(newValue: boolean, place: Place){
+    this.placeStaticService.setPlaceFavoriteFlagOnServer(place, newValue);
+    place.favorite = newValue;
+  }
+  
    /**
    * Submit form to add new batch to current place
    */
@@ -72,14 +80,14 @@ export class StockViewComponent implements OnInit {
     // Tell loading
     this.newPlacePopupLoadingStatus = 0;
 
-    // Create new Batch from form content
+    // Create new Place from form content
     let newPlace: Place = new Place();
     newPlace.id = this.tlHelpersService.generateId();
     newPlace.name = this.getState('place-name', formStates).value;
     newPlace.favorite = this.getState('place-favorite', formStates).value;
     newPlace.position = this.getState('place-position', formStates).value;
     
-    // Add new batch on server
+    // Add new place on server
     this.placeStaticService.addPlaceOnServer(newPlace).then(() => {
       
       // Add place to household
@@ -92,7 +100,7 @@ export class StockViewComponent implements OnInit {
             this.displayNewPlacePopup = false;
             this.newPlacePopupLoadingStatus = -1;
             setTimeout(() => {
-              this.tlAlertService.raiseInfo('La nouveau pièce "'+ newPlace.name + '" a bien été ajoutée');
+              this.tlAlertService.raiseInfo('La nouvelle pièce "'+ newPlace.name + '" a bien été ajoutée');
             }, 500)
         }, 700);
       });

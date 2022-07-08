@@ -99,18 +99,20 @@
     style="margin-left:10px"
     class="tl-row-dir tl-vert-center tl-flex-block">
     
-    <tl-button
+    <tl-button longPress
       [tlStyle]="'tl-dome'"
       [size]="30"
       [icon]="'ion-remove-outline'"
-      (clickButton)="onClickBatchRemove()">
+      (clickButton)="onClickBatchRemove()"
+      (keepClick)="onClickBatchRemove()">
     </tl-button>
     
-    <tl-button
+    <tl-button longPress
       [tlStyle]="'tl-dome'"
       [size]="30"
       [icon]="'ion-add-outline'"
-      (clickButton)="onClickBatchAdd()">
+      (clickButton)="onClickBatchAdd()"
+      (keepClick)="onClickBatchAdd()">
     </tl-button>
     
   </div>

@@ -8,6 +8,20 @@
   *ngIf="this.stockService.isLoaded"
   class="tl-full tl-row-dir tl-hor-center tl-flex-block">
   
+  <!-- Case no place yet -->
+  <ng-container
+   *ngIf="this.stockService.places.length == 0">
+    <p>
+     Pour commencer, ajouter des lieux de stockage 
+    </p>
+    <tl-square-icon
+      class="tl-margined"
+      [size]="30"
+      [icon]="'ion-arrow-down-outline'">
+    </tl-square-icon>
+  </ng-container>
+  
+  <!-- Place cards -->
   <tl-card
     *ngFor="let place of this.stockService.places"
     class="place-card tl-clickable"
@@ -35,28 +49,28 @@
         <tl-square-icon
           *ngIf="place.computedWeather === 1"
           [icon]="'ion-thunderstorm-outline'"
-          [size]="25"
+          [size]="30"
           [color]="'tl-failure'">
         </tl-square-icon>
         
         <tl-square-icon
           *ngIf="place.computedWeather === 2"
           [icon]="'ion-rainy-outline'"
-          [size]="25"
+          [size]="30"
           [color]="'tl-neutral'">
         </tl-square-icon>
         
         <tl-square-icon
           *ngIf="place.computedWeather === 3"
           [icon]="'ion-partly-sunny-outline'"
-          [size]="25"
+          [size]="30"
           [color]="'tl-success'">
         </tl-square-icon>
         
         <tl-square-icon
           *ngIf="place.computedWeather === 4"
           [icon]="'ion-sunny-outline'"
-          [size]="25"
+          [size]="30"
           [color]="'tl-success'">
         </tl-square-icon>
         
@@ -64,19 +78,20 @@
       
       <div
         class="tl-row-dir tl-vert-center tl-flex-block">
-      
-        <tl-square-icon
-          style="cursor:pointer"
-          class="tl-margined"
-          [size]="25"
+        
+        <tl-icon-toggler
+          class="tl-margined" 
+          [size]="30"
           [icon]="'ion-heart-outline'"
-          [color]="(place.favorite)?'tl-outline':'tl-main'">
-        </tl-square-icon>
+          [iconOn]="'ion-heart'"
+          [initialState]="place.favorite"
+          (toggle)="this.onChangeFavoriteFlag($event, place)">
+        </tl-icon-toggler>
         
         <tl-square-icon
           style="cursor:pointer"
           class="tl-margined"
-          [size]="25"
+          [size]="30"
           [icon]="'ion-share-social-outline'">
         </tl-square-icon>
         
@@ -113,13 +128,13 @@
 <!-- Popup to create new place -->
 <tl-popup-overlay
   [display]="this.displayNewPlacePopup"
-  [tlStyle]="'tl-glassmorphic'"
+  [tlStyle]="'tl-sharp-transparent'"
   (close)="this.displayNewPlacePopup = false">
   
   <!-- Popup to display -->
   <tl-card
     style="overflow:visible"
-    [tlStyle]="'tl-outlined'"
+    [tlStyle]="'tl-bodylike'"
     [size]="'tl-two-third-responsive'"
     [padding]="20">
     
@@ -150,6 +165,8 @@
           }
         }"
       [size]="'tl-half-responsive'"
+      [validationInlineStyle]="true"
+      [itemStyle]="'tl-soft-transparent'"
       [itemsBorderRadius]="'tl-br-infinite'"
       [submitButtonLoadingStatus]="this.newPlacePopupLoadingStatus"
       (submitForm)="this.submitNewPlaceForm($event)">
